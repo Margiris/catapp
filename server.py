@@ -1,10 +1,5 @@
-from shitapi import app
-
-try:
-    from cheroot.wsgi import Server as WSGIServer, PathInfoDispatcher
-except ImportError:
-    from cherrypy.wsgiserver import CherryPyWSGIServer as WSGIServer, WSGIPathInfoDispatcher as PathInfoDispatcher
-
+from app import app
+from cheroot.wsgi import Server as WSGIServer, PathInfoDispatcher
 
 d = PathInfoDispatcher({'/': app})
 server = WSGIServer(('0.0.0.0', 8080), d)
