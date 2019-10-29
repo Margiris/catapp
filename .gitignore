@@ -124,3 +124,6 @@ dmypy.json
 
 # VSCode stuff
 .vscode/
+
+# GoodSync data folder
+_gsdata_/

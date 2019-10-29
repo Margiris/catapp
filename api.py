@@ -7,5 +7,5 @@ class CatApi(Api):
         if e.code == 404:
             msg = 'You picked the wrong house, fool!'
         else:
-            msg = 'Oops'
+            msg = 'Meow'
         return jsonify({'message': msg}), e.code

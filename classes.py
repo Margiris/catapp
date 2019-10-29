@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_restful import Resource
+from flask_sqlalchemy import SQLAlchemy
 
 
 class HelloWorld(Resource):
