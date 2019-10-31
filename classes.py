@@ -1,7 +1,9 @@
+# from datetime import datetime
 from flask import Flask, request
 from flask_restful import Resource
-from flask_sqlalchemy import SQLAlchemy
-from app import db
+# from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey
+# from sqlalchemy.ext.declarative import declarative_base
+# from app import db
 
 # class Team(Resource):
 #     def post(self, team_id=None, player_id=None):
@@ -13,10 +15,20 @@ from app import db
 #             # third version
 
 
-class User(db.Model, Resource):
-    id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50))
+class User(Resource):
+    # __tablename__ = "user"
+    # id = Column('id', Integer, primary_key=True)
+    # public_id = Column('public_id', Integer, unique=True, nullable=False)
+    # email = Column('email', String(120), unique=True, nullable=False)
+    # username = Column('username', String(15), unique=True, nullable=False)
+    # password = Column('password', String(60), nullable=False)
+    # avatar = Column('avatar', String(20), nullable=False,
+    #                    default='default_avatar.png')
+    # is_admin = Column('admin', Boolean)
+    # posts = relationship('Post', backref='author', lazy=True)
+
+    # def __repr__(self):
+    #     return f"User('{self.public_id}', '{self.username}', '{self.email}', '{self.is_admin}', '{self.avatar}')"
 
     def get(self):
         num = int(request.args['number'])
@@ -26,3 +38,19 @@ class User(db.Model, Resource):
         received_data = request.get_json()
         print(received_data)
         return {'received': received_data}, 201
+
+
+class Post(Resource):
+    # id = Column(Integer, primary_key=True)
+    # title = Column(String(100), nullable=False)
+    # image = Column(String(20), nullable=False)
+    # datetime_posted = Column(
+    #     DateTime, nullable=False, default=datetime.utcnow)
+    # user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+
+    # def __repr__(self):
+    #     return f"Post('{self.datetime_posted}', '{self.title}', '{self.image}')"
+
+    def get(self):
+        num = int(request.args['number'])
+        return {}
