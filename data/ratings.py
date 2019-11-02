@@ -1,7 +1,7 @@
 from mongoengine import EmbeddedDocument, IntField
 
 
-class Rating(EmbeddedDocument):
+class Ratings(EmbeddedDocument):
     upvote_count = IntField()
     downvote_count = IntField()
 

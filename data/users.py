@@ -2,7 +2,7 @@ from datetime import datetime
 from mongoengine import Document, BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, IntField
 
 
-class User(Document):
+class Users(Document):
     active = BooleanField(default=True)
     is_admin = BooleanField(default=False)
     name = StringField(required=True)

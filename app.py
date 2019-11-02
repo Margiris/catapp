@@ -5,7 +5,8 @@ from data.comments import Comment
 from data.posts import Post
 from data.users import User
 
-from classes import User, Post
+from resources.post import Post
+from resources.user import User
 
 
 app = Flask(__name__)
