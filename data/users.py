@@ -1,5 +1,5 @@
 from datetime import datetime
-from mongoengine import Document, BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, IntField
+from mongoengine import Document, BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, ReferenceField, LazyReferenceField
 
 
 class Users(Document):
@@ -10,8 +10,8 @@ class Users(Document):
     password = BinaryField(required=True)
     registered_datetime = DateTimeField(default=datetime.utcnow)
 
-    post_ids = ListField(IntField)
-    comments_ids = ListField(IntField)
+    post_ids = ListField(ReferenceField('Posts'))
+    comments_ids = ListField(ReferenceField('Comments'))
 
     meta = {
         'db_alias': 'core',
