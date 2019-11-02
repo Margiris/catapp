@@ -4,5 +4,5 @@ from mongoengine import EmbeddedDocument, DateTimeField, StringField, EmbeddedDo
 
 class Comments(EmbeddedDocument):
     posted_datetime = DateTimeField(default=datetime.utcnow)
-    body = StringField()
+    body = StringField(required=True)
     rating = EmbeddedDocumentListField('Ratings')
