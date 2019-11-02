@@ -1,9 +1,10 @@
 from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
 from api import CatApi
+
 from data.comments import Comment
 from data.posts import Post
 from data.users import User
+
 from classes import User, Post
 
 
