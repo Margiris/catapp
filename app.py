@@ -1,12 +1,13 @@
 from flask import Flask
 # from flask_sqlalchemy import SQLAlchemy
 from api import CatApi
+from data.comments import Comment
+from data.posts import Post
+from data.users import User
 from classes import User, Post
 
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-# db = SQLAlchemy(app)
 
 api = CatApi(app, catch_all_404s=True)
 

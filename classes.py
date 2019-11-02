@@ -1,8 +1,6 @@
 # from datetime import datetime
 from flask import Flask, request
 from flask_restful import Resource
-# from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey
-# from sqlalchemy.ext.declarative import declarative_base
 # from app import db
 
 # class Team(Resource):
@@ -16,20 +14,6 @@ from flask_restful import Resource
 
 
 class User(Resource):
-    # __tablename__ = "user"
-    # id = Column('id', Integer, primary_key=True)
-    # public_id = Column('public_id', Integer, unique=True, nullable=False)
-    # email = Column('email', String(120), unique=True, nullable=False)
-    # username = Column('username', String(15), unique=True, nullable=False)
-    # password = Column('password', String(60), nullable=False)
-    # avatar = Column('avatar', String(20), nullable=False,
-    #                    default='default_avatar.png')
-    # is_admin = Column('admin', Boolean)
-    # posts = relationship('Post', backref='author', lazy=True)
-
-    # def __repr__(self):
-    #     return f"User('{self.public_id}', '{self.username}', '{self.email}', '{self.is_admin}', '{self.avatar}')"
-
     def get(self):
         num = int(request.args['number'])
         return {}
@@ -41,16 +25,6 @@ class User(Resource):
 
 
 class Post(Resource):
-    # id = Column(Integer, primary_key=True)
-    # title = Column(String(100), nullable=False)
-    # image = Column(String(20), nullable=False)
-    # datetime_posted = Column(
-    #     DateTime, nullable=False, default=datetime.utcnow)
-    # user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-
-    # def __repr__(self):
-    #     return f"Post('{self.datetime_posted}', '{self.title}', '{self.image}')"
-
     def get(self):
         num = int(request.args['number'])
         return {}
