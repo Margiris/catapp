@@ -3,21 +3,20 @@ from flask_restful import Resource
 
 from data.users import Users
 
-# class Team(Resource):
-#     def post(self, team_id=None, player_id=None):
-#         if team_id is None and player_id is None:
-#             # first version
-#         if team_id is not None and player_id is None:
-#             # second version
-#         if team_id is not None and player_id is not None:
-#             # third version
 
 class User(Resource):
-    def get(self, id):
-        if id is None:
-            Users.query
-        num = int(request.args['number'])
-        return {}
+    def get(self, name=None):
+        user_data = Users.objects([] if name is None else name)
+        user_data = [user.to_json() for user in user_data]
+
+        
+
+        if name is None:
+            return {'users': user_data}, 200
+        else:
+            if len(user_data) < 1:
+                return {}, 404 
+            return {'user': user_data[0].to_json()}, 200
 
     def post(self):
         received_data = request.get_json()

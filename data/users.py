@@ -1,5 +1,4 @@
 from datetime import datetime
-from json import dumps
 from flask_mongoengine import Document
 from mongoengine import BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, ReferenceField, LazyReferenceField
 
@@ -7,7 +6,7 @@ from mongoengine import BooleanField, StringField, EmailField, BinaryField, Date
 class Users(Document):
     active = BooleanField(default=True)
     is_admin = BooleanField(default=False)
-    name = StringField(required=True)
+    name = StringField(primary_key=True)
     email = EmailField(unique=True, required=True)
     password = BinaryField(required=True)
     registered_datetime = DateTimeField(default=datetime.utcnow)
@@ -25,11 +24,11 @@ class Users(Document):
             'user post count': len(self.posts),
             'comment count': len(self.comments)
         }
-        return dumps(user_dict)
+        return user_dict
 
     meta = {
         'db_alias': 'core',
         'collection': 'users',
-        'indexes': ['name', 'email'],
+        'indexes': ['email'],
         'ordering': ['-registered_datetime']
     }
