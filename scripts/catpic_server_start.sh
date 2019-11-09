@@ -44,6 +44,7 @@ then
     kill $(netstat -ltnp | grep ':8080' | awk '{ print $7 }' | sed 's/[^0-9]*//g')
     
     #  run server
+    printf $green_text 'Starting...''
     python ./server.py
 else
     printf $red_text 'Virtual environment activation failed, current python executable:'
