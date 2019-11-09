@@ -1,4 +1,4 @@
-from app import app
+from main import app
 from cheroot.wsgi import Server as WSGIServer, PathInfoDispatcher
 
 d = PathInfoDispatcher({'/': app})
