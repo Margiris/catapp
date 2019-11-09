@@ -29,8 +29,8 @@ else
 fi
 
 # activate virtual environment
-# printf $green_text 'Activating virtual environment...'
-# source ./venv/bin/activate
+printf $green_text 'Activating virtual environment...'
+source ./venv/bin/activate
 
 # check if virtual environment activation successful
 if [ $(which python) = "/data/data/com.termux/files/home/catpic/venv/bin/python" ]
