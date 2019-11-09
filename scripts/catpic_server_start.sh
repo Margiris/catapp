@@ -24,7 +24,7 @@ else
     # copy new script in place of older one then exec it
     printf $green_text 'Found new version, updating...'
     cp ./scripts/catpic_server_start.sh ~/.termux/tasker/catpic_server_start.sh
-    printf $green_text 'Restarting script...\n'
+    printf $green_text 'Restarting script...'
     exec ~/.termux/tasker/catpic_server_start.sh
 fi
 
