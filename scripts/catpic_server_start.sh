@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # go to project dir
 cd ~/catpic
 
