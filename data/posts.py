@@ -2,7 +2,7 @@ from datetime import datetime
 from json import dumps
 from flask_mongoengine import Document
 from mongoengine import StringField, ImageField, DateTimeField, ReferenceField, EmbeddedDocumentListField, CASCADE
-
+from PIL import PILLOW_VERSION
 
 class Posts(Document):
     title = StringField(required=True)
