@@ -1,16 +1,16 @@
 # setup variables
-green_text='\e[0;32m%s\e[m'
+green_text='\e[0;32m%s\n\e[m'
 
 # go to project dir
 cd ~/catpic
 
 #  drop any changes
-printf $green_text 'Droping any changes...\n'
+printf $green_text 'Droping any changes...'
 git stash save --keep-index
 git stash drop
 
 # update dev branch
-printf $green_text 'Updating dev branch...\n'
+printf $green_text 'Updating dev branch...'
 git checkout dev
 git pull
 
