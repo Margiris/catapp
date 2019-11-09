@@ -8,7 +8,10 @@ git pull
 cp ./scripts/catpic_server_start.sh ~/.termux/tasker/
 
 source ./venv/bin/activate
-
-pip install -r ./requirements.txt
+if [$(which python) = "/data/data/com.termux/files/home/catpic/venv/bin/python"] then
+    pip install -r ./requirements.txt
+else
+    echo $(which python)
+fi
 
 python ./server.py
