@@ -21,6 +21,12 @@ fi
 
 # activate virtual environment
 source ./venv/bin/activate
-# update dependencies and run server
+
+# update dependencies
 pip install -r ./requirements.txt
+
+# kill any processes that might be occupying 8080 port
+kill $(netstat -ltnp | grep ':8080' | awk '{ print $7 }' | sed 's/[^0-9]*//g')
+
+#  run server
 python ./server.py
