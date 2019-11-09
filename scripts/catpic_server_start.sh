@@ -1,5 +1,5 @@
 #!/bin/bash
-cat ~/.termux/tasker/catpic_server_start.sh
+
 # go to project dir
 cd ~/catpic
 
@@ -21,12 +21,6 @@ fi
 
 # activate virtual environment
 source ./venv/bin/activate
-
-# if virtual environment activation successful update dependencies and run server
-if [ $(which python) = "/data/data/com.termux/files/home/catpic/venv/bin/python" ]
-then
-    pip install -r ./requirements.txt
-    python ./server.py
-else
-    echo $(which python)
-fi
+# update dependencies and run server
+pip install -r ./requirements.txt
+python ./server.py
