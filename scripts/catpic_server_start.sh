@@ -46,7 +46,6 @@ then
     #  run server
     printf $green_text 'Starting...'
     python ./server.py
-    exit
 else
     printf $red_text 'Virtual environment activation failed, current python executable:'
     printf $red_text $(which python)
