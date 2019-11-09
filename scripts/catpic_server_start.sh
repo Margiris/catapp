@@ -31,13 +31,20 @@ fi
 printf $green_text 'Activating virtual environment...\n'
 source ./venv/bin/activate
 
-# update dependencies
-printf $green_text 'Updating dependencies...\n'
-pip install -r ./requirements.txt
+# check if virtual environment activation successful
+if [ $(which python) = "/data/data/com.termux/files/home/catpic/venv/bin/python" ]
+then
+    # update dependencies
+    printf $green_text 'Updating dependencies...\n'
+    pip install -r ./requirements.txt
+    
+    # kill any processes that might be occupying 8080 port
+    printf $green_text 'Freeing up required port...\n'
+    kill $(netstat -ltnp | grep ':8080' | awk '{ print $7 }' | sed 's/[^0-9]*//g')
+    
+    #  run server
+    python ./server.py
+else
+    echo $(which python)
+fi
 
-# kill any processes that might be occupying 8080 port
-printf $green_text 'Freeing up required port...\n'
-kill $(netstat -ltnp | grep ':8080' | awk '{ print $7 }' | sed 's/[^0-9]*//g')
-
-#  run server
-python ./server.py
