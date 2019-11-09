@@ -2,12 +2,15 @@ from flask import Flask
 from flask_restful import Api
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
+from secret import secret_key
+
 from resources.post import Post
 from resources.user import User
 
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = secret_key
 app.config['MONGODB_SETTINGS'] = {
     'alias': 'core',
     'db': 'catpic',
