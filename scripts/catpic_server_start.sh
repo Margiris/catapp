@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # setup variables
 green_text='\e[0;32m%s\n\e[m'
 red_text='\e[0;31m%s\n\e[m'
