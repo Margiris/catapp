@@ -11,11 +11,12 @@ git stash drop
 git checkout dev
 git pull
 
-# if scripts differ we assume that it was updated and copy new script in place of older, then chmod and exec it
-if cmp ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh
+# if scripts differ we assume that it was updated
+if cmp -s ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh
 then
+    # copy new script in place of older one, then chmod (?) and exec it
     cp ./scripts/catpic_server_start.sh ~/.termux/tasker/
-    chmod 700 ~/.termux/tasker/catpic_server_start.sh
+    # chmod 700 ~/.termux/tasker/catpic_server_start.sh
     exec ~/.termux/tasker/catpic_server_start.sh
 fi
 
