@@ -1,5 +1,5 @@
 # setup variables
-green_text = '\e[0;32m'
+green_text='\e[0;32m'
 
 # go to project dir
 cd ~/catpic
