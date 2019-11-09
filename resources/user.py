@@ -1,24 +1,39 @@
+from datetime import datetime
 from flask import request
-from flask_restful import Resource
+from flask_restful import abort, Resource
 
 from data.users import Users
 
 
 class User(Resource):
     def get(self, name=None):
-        user_data = Users.objects([] if name is None else name)
+        kwarg = {} if name is None else {'name': name}
+        user_data = Users.objects(**kwarg)
         user_data = [user.to_json() for user in user_data]
-
-        
 
         if name is None:
             return {'users': user_data}, 200
         else:
             if len(user_data) < 1:
-                return {}, 404 
-            return {'user': user_data[0].to_json()}, 200
+                abort(404, message="User '{}' doesn't exist".format(name))
+            return {'user': user_data[0]}, 200
 
-    def post(self):
+    def post(self, name=None):
+        if name is not None:
+            abort(405, message="Can't post to this endpoint. Try /user")
+
         received_data = request.get_json()
-        print(received_data)
-        return {'received': received_data}, 201
+
+        new_user = Users(
+            active=True,
+            is_admin=False,
+            name=received_data['name'],
+            email=received_data['email'],
+            password=received_data['password'],
+            registered_datetime=datetime.utcnow(),
+            posts=[],
+            comments=[]
+        )  # .save()
+
+        return {'message': "User '{}' registered successfully".format(new_user.name),
+                'user': new_user.to_json()}, 201
