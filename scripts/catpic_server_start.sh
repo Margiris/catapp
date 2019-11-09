@@ -12,7 +12,7 @@ git checkout dev
 git pull
 
 # if scripts differ we assume that it was updated and copy new script in place of older, then chmod and exec it
-cmp ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh || cp ./scripts/catpic_server_start.sh ~/.termux/tasker/ && chmod 700 && exec ~/.termux/tasker/catpic_server_start.sh
+cmp ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh || cp ./scripts/catpic_server_start.sh ~/.termux/tasker/ && chmod 700 ~/.termux/tasker/catpic_server_start.sh && exec ~/.termux/tasker/catpic_server_start.sh
 
 which python
 # activate virtual environment
