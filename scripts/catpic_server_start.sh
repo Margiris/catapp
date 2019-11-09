@@ -14,22 +14,19 @@ git pull
 # if scripts differ we assume that it was updated
 if cmp -s ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh
 then
-    # copy new script in place of older one, then chmod (?) and exec it
+    # copy new script in place of older one then exec it
     cp ./scripts/catpic_server_start.sh ~/.termux/tasker/
-    # chmod 700 ~/.termux/tasker/catpic_server_start.sh
     exec ~/.termux/tasker/catpic_server_start.sh
 fi
 
-which python
 # activate virtual environment
 source ./venv/bin/activate
-which python
 
+# if virtual environment activation successful update dependencies and run server
 if [ $(which python) = "/data/data/com.termux/files/home/catpic/venv/bin/python" ]
 then
     pip install -r ./requirements.txt
+    python ./server.py
 else
     echo $(which python)
 fi
-
-python ./server.py
