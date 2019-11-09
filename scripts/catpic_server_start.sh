@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cat ~/.termux/tasker/catpic_server_start.sh
 # go to project dir
 cd ~/catpic
 
@@ -12,7 +12,12 @@ git checkout dev
 git pull
 
 # if scripts differ we assume that it was updated and copy new script in place of older, then chmod and exec it
-cmp ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh || cp ./scripts/catpic_server_start.sh ~/.termux/tasker/ && chmod 700 ~/.termux/tasker/catpic_server_start.sh && exec ~/.termux/tasker/catpic_server_start.sh
+if cmp ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh
+then
+    cp ./scripts/catpic_server_start.sh ~/.termux/tasker/
+    chmod 700 ~/.termux/tasker/catpic_server_start.sh
+    exec ~/.termux/tasker/catpic_server_start.sh
+fi
 
 which python
 # activate virtual environment
