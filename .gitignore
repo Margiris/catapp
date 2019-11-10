@@ -127,4 +127,4 @@ dmypy.json
 
 # GoodSync data folder
 _gsdata_/
-secret.py
+secrets.py
