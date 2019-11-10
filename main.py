@@ -34,7 +34,7 @@ api.add_resource(User,  # '/users',
                         '/user/<string:name>', endpoint='user')
 api.add_resource(Post,  # '/posts',
                         '/post',
-                        '/post/<string:name>', endpoint='post')
+                        '/post/<string:id>', endpoint='post')
 
 if __name__ == "__main__":
     app.run(debug=True)

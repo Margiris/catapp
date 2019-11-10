@@ -15,6 +15,7 @@ class Posts(Document):
 
     def to_json(self):
         post_dict = {
+            'id' : str(self.id),
             'title': self.title,
             'posted on': str(self.posted_datetime.replace(microsecond=0)),
             'by': self.op_name,
@@ -22,7 +23,7 @@ class Posts(Document):
             # TODO get score value instead of ratings object
             'score': self.rating
         }
-        return dumps(post_dict)
+        return post_dict
 
     meta = {
         'db_alias': 'core',
