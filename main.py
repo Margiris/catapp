@@ -5,6 +5,7 @@ from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 from secrets import app_secret_key, db_local_ip, db_debug_ip
 
 from resources.auth import Login
+from resources.index import Index
 from resources.post import Post
 from resources.user import User
 
@@ -30,6 +31,7 @@ api = Api(app, catch_all_404s=True)  # , errors=errors)
 db = MongoEngine(app)
 app.session_interface = MongoEngineSessionInterface(db)
 
+api.add_resource(Index, '/', endpoint='index')
 api.add_resource(Login,  '/login', endpoint='login')
 api.add_resource(User,  # '/users',
                         '/user',
