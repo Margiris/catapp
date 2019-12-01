@@ -1,11 +1,10 @@
 from flask import Flask
 from flask_restful import Api
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
-from flask_dance.contrib.github import make_github_blueprint, github
 
 from secrets import app_secret_key, github_client_id, github_client_secret
 
-from resources.auth import GitHub
+from resources.auth import Login
 from resources.post import Post
 from resources.user import User
 
@@ -20,8 +19,6 @@ app.config['MONGODB_SETTINGS'] = {
     'port': 27017
 }
 
-github_blueprint = make_github_blueprint(client_id=github_client_id, client_secret=github_client_secret)
-
 # errors = {
 #     'NotFound': {
 #         'message': "You picked the wrong house, fool!",
@@ -33,7 +30,7 @@ api = Api(app, catch_all_404s=True)  # , errors=errors)
 db = MongoEngine(app)
 app.session_interface = MongoEngineSessionInterface(db)
 
-api.add_resource(GitHub,  '/login/github', endpoint='github_login')
+api.add_resource(Login,  '/login', endpoint='login')
 api.add_resource(User,  # '/users',
                         '/user',
                         '/user/<string:name>', endpoint='user')
