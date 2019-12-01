@@ -3,6 +3,7 @@ from flask import request
 from flask_restful import abort, Resource
 
 from data.users import Users
+from resources.auth import hash_string_with_salt
 
 
 class User(Resource):
@@ -23,17 +24,18 @@ class User(Resource):
             abort(405, message="Can't post to this endpoint. Try /user")
 
         received_data = request.get_json()
+        hashed_password = hash_string_with_salt(received_data['password'])
 
         new_user = Users(
             active=True,
             is_admin=False,
             name=received_data['name'],
             email=received_data['email'],
-            password=received_data['password'],
+            password=hashed_password,
             registered_datetime=datetime.utcnow(),
             posts=[],
             comments=[]
-        )  # .save()
+        ).save()
 
         return {'message': "User '{}' registered successfully".format(new_user.name),
                 'user': new_user.to_json()}, 201

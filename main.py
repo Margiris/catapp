@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
-from secrets import app_secret_key, github_client_id, github_client_secret
+from secrets import app_secret_key, db_local_ip, db_debug_ip
 
 from resources.auth import Login
 from resources.post import Post
@@ -15,7 +15,7 @@ app.config['SECRET_KEY'] = app_secret_key
 app.config['MONGODB_SETTINGS'] = {
     'alias': 'core',
     'db': 'catpic',
-    'host': '192.168.0.102' if __name__ == "__main__" else '127.0.0.1',
+    'host': db_debug_ip if __name__ == "__main__" else db_local_ip,
     'port': 27017
 }
 
