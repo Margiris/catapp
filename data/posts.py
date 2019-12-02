@@ -1,21 +1,23 @@
 from datetime import datetime
 from json import dumps
+
 from flask_mongoengine import Document
-from mongoengine import StringField, ImageField, DateTimeField, ReferenceField, EmbeddedDocumentListField, CASCADE
+from mongoengine import StringField, ImageField, DateTimeField, ReferenceField, EmbeddedDocumentListField
 from PIL import PILLOW_VERSION
+
 
 class Posts(Document):
     title = StringField(required=True)
     image = ImageField(required=True, thumbnail_size=(400, 400, True))
     posted_datetime = DateTimeField(default=datetime.utcnow)
-    op_name = StringField(required=True)
+    op_name = ReferenceField('Users')
 
     comments = EmbeddedDocumentListField('Comments')
     rating = EmbeddedDocumentListField('Ratings')
 
     def to_json(self):
         post_dict = {
-            'id' : str(self.id),
+            'id': str(self.id),
             'title': self.title,
             'posted on': str(self.posted_datetime.replace(microsecond=0)),
             'by': self.op_name,

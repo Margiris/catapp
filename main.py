@@ -4,10 +4,10 @@ from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
 from secrets import app_secret_key, db_local_ip, db_debug_ip
 
-from resources.auth import Login
 from resources.index import Index
 from resources.post import Post
 from resources.user import User
+from resources.authorization import Login
 
 
 app = Flask(__name__)
