@@ -7,7 +7,7 @@ from secrets import app_secret_key, db_local_ip, db_debug_ip
 from resources.index import Index
 from resources.post import Post
 from resources.user import User
-from resources.authorization import Login
+from resources.authorization import Login, Logout
 
 
 app = Flask(__name__)
@@ -33,6 +33,7 @@ app.session_interface = MongoEngineSessionInterface(db)
 
 api.add_resource(Index, '/', endpoint='index')
 api.add_resource(Login,  '/login', endpoint='login')
+api.add_resource(Logout,  '/logout', endpoint='logout')
 api.add_resource(User,  # '/users',
                         '/user',
                         '/user/<string:name>', endpoint='user')

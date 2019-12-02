@@ -1,4 +1,5 @@
 from binascii import hexlify
+from calendar import timegm
 from datetime import datetime, timedelta
 from functools import wraps
 from hashlib import sha256, pbkdf2_hmac
@@ -6,10 +7,10 @@ from os import urandom
 
 from flask import request, make_response
 from flask_restful import abort, Resource
-import jwt
+from jwt import encode, decode
 
 from data.users import Users
-from secrets import app_secret_key
+from secrets import app_secret_key, token_expiration_time
 
 
 class Login(Resource):
@@ -19,13 +20,14 @@ class Login(Resource):
 
         if not auth or not auth.username or not auth.password or user is None or not verify_password(user.password, auth.password):
             return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
-
-        token = jwt.encode({
-            'id': str(user.id),
-            'expiration': str(datetime.utcnow() + timedelta(minutes=30))
+            # TODO ^ maybe abort() with headers
+        token = encode({
+            'exp': datetime.utcnow() + timedelta(minutes=60),
+            'iat': datetime.utcnow(),
+            'sub': str(user.id)
         }, app_secret_key)
 
-        return {'token': token.decode('UTF-8')}
+        return {'token': token.decode('UTF-8')}, 200
 
 
 def hash_string_with_salt(a_string, salt=None):
@@ -46,10 +48,24 @@ def verify_password(stored_password, provided_password):
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
+        try:
+            token = request.headers['authorization'][7:]
+            payload = decode(token, app_secret_key)
+
+            assert payload['exp'] > timegm(datetime.utcnow().utctimetuple())
+            assert payload['iat'] > timegm(
+                (datetime.utcnow() - token_expiration_time).utctimetuple())
+
+            current_user = Users.objects(id=payload['sub']).first()
+        except Exception as e:
+            print(repr(e))
+            return {'message': 'Token is missing, invalid or expired'}, 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
 
 
-class Test(Resource):
+class Logout(Resource):
     def get(self):
-        auth = request.authorization
-        print()
+        return {}

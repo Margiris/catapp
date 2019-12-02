@@ -4,11 +4,15 @@ from flask import request
 from flask_restful import abort, Resource
 
 from data.users import Users
-from resources.authorization import hash_string_with_salt
+from resources.authorization import hash_string_with_salt, token_required
 
 
 class User(Resource):
-    def get(self, name=None):
+    @token_required
+    def get(current_user, self, name=None):
+        if name is None and not current_user.is_admin:
+            abort(401, message='Nothing to see here. Try /user/<username> for user info.')
+
         kwarg = {} if name is None else {'name': name}
         user_data = Users.objects(**kwarg)
         user_data = [user.to_json() for user in user_data]
@@ -47,15 +51,16 @@ class User(Resource):
         return {'message': "User '{}' registered successfully".format(new_user.name),
                 'user': new_user.to_json()}, 201
 
-    def put(self, name=None):
+    @token_required
+    def put(current_user, self, name=None):
         if name is None:
             abort(405, message="Can't PUT to this endpoint. Try /user/<username>")
 
         existing_user = Users.objects(name=name).first()
-        
+
         if existing_user is None:
             abort(404, message="User '{}' doesn't exist".format(name))
-        
+
         received_data = request.get_json()
         new_name = received_data.get('name')
 
@@ -73,12 +78,13 @@ class User(Resource):
 
         return {}, 204
 
-    def delete(self, name=None):
+    @token_required
+    def delete(current_user, self, name=None):
         if name is None:
             abort(405, message="Can't DELETE at this endpoint. Try /user/<username>")
-        
+
         existing_user = Users.objects(name=name).first()
-        
+
         if existing_user is None:
             abort(404, message="User '{}' doesn't exist".format(name))
 
