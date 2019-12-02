@@ -3,4 +3,5 @@ Flask_RESTful==0.3.7
 Flask==1.1.1
 Pillow==6.2.1
 flask_mongoengine==0.9.5
+PyJWT==1.7.1
 mongoengine==0.18.2
