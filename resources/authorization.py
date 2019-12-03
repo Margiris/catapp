@@ -68,28 +68,35 @@ def token_required(f):
     return decorated
 
 
-def validate_dictionary(dictionary, module_class, unique_keys_set, other_keys_set):
+def validate_values_in_dictionary(dictionary, module_class, unique_keys_set, other_keys_set):
     # merge key sets
     keys_set = unique_keys_set.union(other_keys_set)
 
-    # check for missing data
+    # check for missing data and add to errors dict if found
     errors = {
         key: key.title() + ' is required' for key in keys_set if key not in dictionary}
-
     # exclude missing keys from further validation
     keys_set = {key for key in keys_set if key not in errors}
     unique_keys_set = {key for key in unique_keys_set if key not in errors}
 
-    # find duplicates of unique keys in database
-    duplicate = {key: key.title() + ' already exists' for key in unique_keys_set if len(
-        module_class.objects(**{key: dictionary[key]})) >= 1}
+    # check if password is safe enough and put in errors dict if not; exclude from further validation
+    if 'password' in keys_set:
+        if len(dictionary.get('password')) < 8:
+            errors['password'] = 'Password must be at least 8 characters long'
+        dictionary.pop('password', None)
+        keys_set.remove('password')
 
-    # add duplicate keys to errors
-    errors.update(duplicate)
+    # check for illegal characters and put in errors dict if found
+    illegal_chars = ['/', '\\']
+    errors = {**errors, **{key: key.title() + ' contains illegal characters' for key in dictionary if any(
+        char in dictionary[key] for char in illegal_chars)}}
+    # exclude illegal keys from further validation
+    keys_set = {key for key in keys_set if key not in errors}
+    unique_keys_set = {key for key in unique_keys_set if key not in errors}
 
-    # check if password is safe enough
-    if 'password' in keys_set and len(dictionary.get('password')) < 8:
-        errors['password'] = 'Password must be at least 8 characters long'
+    # find duplicates of unique keys in database and put in errors dict if found
+    errors = {**errors,
+              **{key: key.title() + ' already exists' for key in unique_keys_set if len(module_class.objects(**{key: dictionary[key]})) >= 1}}
 
     return errors
 

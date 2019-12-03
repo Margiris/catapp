@@ -5,7 +5,7 @@ from flask_restful import abort, Resource
 from mongoengine.errors import NotUniqueError, ValidationError
 
 from data.users import Users
-from resources.authorization import hash_string_with_salt, token_required, validate_dictionary
+from resources.authorization import hash_string_with_salt, token_required, validate_values_in_dictionary
 
 
 class User(Resource):
@@ -30,9 +30,7 @@ class User(Resource):
             abort(405, message="Can't POST to this endpoint. Try /user")
 
         received_data = request.get_json()
-        from pprint import pprint
-        pprint(received_data)
-        errors = validate_dictionary(received_data, Users, {'name', 'email'}, {'password'})
+        errors = validate_values_in_dictionary(received_data, Users, {'name', 'email'}, {'password'})
         if errors:
             abort(400, errors=errors)
 
