@@ -10,7 +10,7 @@ class Posts(Document):
     title = StringField(required=True)
     image = ImageField(required=True, thumbnail_size=(400, 400, True))
     posted_datetime = DateTimeField(default=datetime.utcnow)
-    op_name = ReferenceField('Users')
+    author = ReferenceField('Users')
 
     comments = EmbeddedDocumentListField('Comments')
     rating = EmbeddedDocumentListField('Ratings')
@@ -20,7 +20,7 @@ class Posts(Document):
             'id': str(self.id),
             'title': self.title,
             'posted on': str(self.posted_datetime.replace(microsecond=0)),
-            'by': self.op_name,
+            'by': self.author,
             'comment count': len(self.comments),
             # TODO get score value instead of ratings object
             'score': self.rating

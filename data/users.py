@@ -37,4 +37,4 @@ class Users(Document):
     }
 
 
-Users.register_delete_rule(Posts, 'op_name', CASCADE)
+Users.register_delete_rule(Posts, 'author', CASCADE)

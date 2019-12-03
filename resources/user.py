@@ -2,16 +2,17 @@ from datetime import datetime
 
 from flask import request
 from flask_restful import abort, Resource
+from mongoengine.errors import NotUniqueError, ValidationError
 
 from data.users import Users
-from resources.authorization import hash_string_with_salt, token_required
+from resources.authorization import hash_string_with_salt, token_required, validate_dictionary
 
 
 class User(Resource):
     @token_required
     def get(current_user, self, name=None):
         if name is None and not current_user.is_admin:
-            abort(401, message='Nothing to see here. Try /user/<username> for user info.')
+            abort(401, message="Missing rights. Try /user/<username> for user info.")
 
         kwarg = {} if name is None else {'name': name}
         user_data = Users.objects(**kwarg)
@@ -29,24 +30,29 @@ class User(Resource):
             abort(405, message="Can't POST to this endpoint. Try /user")
 
         received_data = request.get_json()
+        from pprint import pprint
+        pprint(received_data)
+        errors = validate_dictionary(received_data, Users, {'name', 'email'}, {'password'})
+        if errors:
+            abort(400, errors=errors)
+
         name = received_data['name']
-
-        if len(Users.objects(name=name)) >= 1:
-            abort(409, message="User '{}' already exists".format(name))
-
         email = received_data['email']
         hashed_password = hash_string_with_salt(received_data['password'])
 
-        new_user = Users(
-            active=True,
-            is_admin=False,
-            name=name,
-            email=email,
-            password=hashed_password,
-            registered_datetime=datetime.utcnow(),
-            posts=[],
-            comments=[]
-        ).save()
+        try:
+            new_user = Users(
+                active=True,
+                is_admin=False,
+                name=name,
+                email=email,
+                password=hashed_password,
+                registered_datetime=datetime.utcnow(),
+                posts=[],
+                comments=[]
+            ).save()
+        except ValidationError as e:
+            abort(400, errors=str(e))
 
         return {'message': "User '{}' registered successfully".format(new_user.name),
                 'user': new_user.to_json()}, 201
@@ -82,6 +88,9 @@ class User(Resource):
     def delete(current_user, self, name=None):
         if name is None:
             abort(405, message="Can't DELETE at this endpoint. Try /user/<username>")
+
+        if current_user.name != name and not current_user.is_admin:
+            abort(401, message="Missing rights.")
 
         existing_user = Users.objects(name=name).first()
 

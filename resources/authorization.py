@@ -19,8 +19,8 @@ class Login(Resource):
         user = Users.objects(name=auth.username).first()
 
         if not auth or not auth.username or not auth.password or user is None or not verify_password(user.password, auth.password):
+            # TODO maybe abort() with headers
             return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
-            # TODO ^ maybe abort() with headers
         token = encode({
             'exp': datetime.utcnow() + timedelta(minutes=60),
             'iat': datetime.utcnow(),
@@ -57,13 +57,41 @@ def token_required(f):
                 (datetime.utcnow() - token_expiration_time).utctimetuple())
 
             current_user = Users.objects(id=payload['sub']).first()
+
+            assert current_user is not None
         except Exception as e:
-            print(repr(e))
+            # TODO will abort work here?
             return {'message': 'Token is missing, invalid or expired'}, 401
 
         return f(current_user, *args, **kwargs)
 
     return decorated
+
+
+def validate_dictionary(dictionary, module_class, unique_keys_set, other_keys_set):
+    # merge key sets
+    keys_set = unique_keys_set.union(other_keys_set)
+
+    # check for missing data
+    errors = {
+        key: key.title() + ' is required' for key in keys_set if key not in dictionary}
+
+    # exclude missing keys from further validation
+    keys_set = {key for key in keys_set if key not in errors}
+    unique_keys_set = {key for key in unique_keys_set if key not in errors}
+
+    # find duplicates of unique keys in database
+    duplicate = {key: key.title() + ' already exists' for key in unique_keys_set if len(
+        module_class.objects(**{key: dictionary[key]})) >= 1}
+
+    # add duplicate keys to errors
+    errors.update(duplicate)
+
+    # check if password is safe enough
+    if 'password' in keys_set and len(dictionary.get('password')) < 8:
+        errors['password'] = 'Password must be at least 8 characters long'
+
+    return errors
 
 
 class Logout(Resource):
