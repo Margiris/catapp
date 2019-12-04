@@ -60,43 +60,42 @@ def token_required(f):
 
             assert current_user is not None
         except Exception as e:
-            # TODO will abort work here?
-            return {'message': 'Token is missing, invalid or expired'}, 401
+            abort(401, message='Token is missing, invalid or expired')
 
         return f(current_user, *args, **kwargs)
 
     return decorated
 
 
-def validate_values_in_dictionary(dictionary, module_class, unique_keys_set, other_keys_set):
-    # merge key sets
-    keys_set = unique_keys_set.union(other_keys_set)
-
+def validate_values_in_dictionary(dictionary, module_class, required_keys={}, sensitive_keys={}, illegal_chars=['/', '\\'], unique_keys={}, admin_keys={}, admin=False):
     # check for missing data and add to errors dict if found
-    errors = {
-        key: key.title() + ' is required' for key in keys_set if key not in dictionary}
-    # exclude missing keys from further validation
-    keys_set = {key for key in keys_set if key not in errors}
-    unique_keys_set = {key for key in unique_keys_set if key not in errors}
+    errors = {key: '{} is required'.format(
+        key.title()) for key in required_keys if key not in dictionary}
 
-    # check if password is safe enough and put in errors dict if not; exclude from further validation
-    if 'password' in keys_set:
-        if len(dictionary.get('password')) < 8:
-            errors['password'] = 'Password must be at least 8 characters long'
-        dictionary.pop('password', None)
-        keys_set.remove('password')
+    # exclude keys with errors from further validation
+    admin_keys = {key for key in admin_keys if key not in errors}
+    # check if user has rights to keys
+    if not admin:
+        errors = {**errors,
+                  **{key: "Missing rights for '{}' property".format(key) for key in admin_keys if key in dictionary}}
 
+    # check if provided password is safe enough and put in errors dict if not
+    if len(dictionary.get('password', "12345678")) < 8:
+        errors['password'] = 'Password must be at least 8 characters long'
+
+    # exclude keys with errors from further validation
+    sensitive_keys = {key for key in sensitive_keys if key not in errors}
     # check for illegal characters and put in errors dict if found
-    illegal_chars = ['/', '\\']
-    errors = {**errors, **{key: key.title() + ' contains illegal characters' for key in dictionary if any(
-        char in dictionary[key] for char in illegal_chars)}}
-    # exclude illegal keys from further validation
-    keys_set = {key for key in keys_set if key not in errors}
-    unique_keys_set = {key for key in unique_keys_set if key not in errors}
+    errors = {**errors,
+              **{key: '{} contains illegal characters'.format(key.title()) for key in sensitive_keys if any(
+                  char in dictionary.get(key, "") for char in illegal_chars)}}
 
+    # exclude keys with errors from further validation
+    unique_keys = {key for key in unique_keys if key not in errors}
     # find duplicates of unique keys in database and put in errors dict if found
     errors = {**errors,
-              **{key: key.title() + ' already exists' for key in unique_keys_set if len(module_class.objects(**{key: dictionary[key]})) >= 1}}
+              **{key: '{} already exists'.format(key.title()) for key in unique_keys if len(
+                  module_class.objects(**{key: dictionary.get(key, "")})) >= 1}}
 
     return errors
 

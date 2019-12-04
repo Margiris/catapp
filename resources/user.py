@@ -29,14 +29,15 @@ class User(Resource):
         if name is not None:
             abort(405, message="Can't POST to this endpoint. Try /user")
 
-        received_data = request.get_json()
-        errors = validate_values_in_dictionary(received_data, Users, {'name', 'email'}, {'password'})
+        received_json = request.get_json()
+        errors = validate_values_in_dictionary(received_json, Users,
+            required_keys={'name', 'email', 'password'}, sensitive_keys={'name'}, unique_keys={'name', 'email'})
         if errors:
             abort(400, errors=errors)
 
-        name = received_data['name']
-        email = received_data['email']
-        hashed_password = hash_string_with_salt(received_data['password'])
+        name = received_json['name']
+        email = received_json['email']
+        hashed_password = hash_string_with_salt(received_json['password'])
 
         try:
             new_user = Users(
@@ -61,22 +62,21 @@ class User(Resource):
             abort(405, message="Can't PUT to this endpoint. Try /user/<username>")
 
         existing_user = Users.objects(name=name).first()
-
         if existing_user is None:
             abort(404, message="User '{}' doesn't exist".format(name))
 
-        received_data = request.get_json()
-        new_name = received_data.get('name')
+        received_json = request.get_json()
+        errors = validate_values_in_dictionary(received_json, Users, sensitive_keys={'name'}, unique_keys={'name', 'email'},
+                                               admin=current_user.is_admin, admin_keys={'active', 'is_admin', 'name'})
+        if errors:
+            abort(400, errors=errors)
 
-        if len(Users.objects(name=new_name)) >= 1:
-            abort(409, message="User '{}' already exists".format(name))
+        if received_json.get('active')      is not None: existing_user.active = bool(received_json.get('active'))
+        if received_json.get('is_admin')    is not None: existing_user.is_admin = bool(received_json.get('is_admin'))
+        if received_json.get('name')        is not None: existing_user.name = received_json.get('name')
 
-        if received_data.get('active') is not None: existing_user.active = bool(received_data.get('active'))
-        if received_data.get('is_admin') is not None: existing_user.is_admin = bool(received_data.get('is_admin'))
-        if received_data.get('name') is not None: existing_user.name = received_data.get('name')
-
-        if received_data.get('email') is not None: existing_user.email = received_data.get('email')
-        if received_data.get('password') is not None: existing_user.password = hash_string_with_salt(received_data.get('password'))
+        if received_json.get('email')       is not None: existing_user.email = received_json.get('email')
+        if received_json.get('password')    is not None: existing_user.password = hash_string_with_salt(received_json.get('password'))
 
         existing_user.save()
 
@@ -86,7 +86,6 @@ class User(Resource):
     def delete(current_user, self, name=None):
         if name is None:
             abort(405, message="Can't DELETE at this endpoint. Try /user/<username>")
-
         if current_user.name != name and not current_user.is_admin:
             abort(401, message="Missing rights.")
 
