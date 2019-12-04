@@ -5,8 +5,8 @@ from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 from secrets import app_secret_key, db_local_ip, db_debug_ip
 
 from resources.index import Index
-from resources.post import Post
 from resources.user import User
+from resources.post import Post
 from resources.authorization import Login, Logout
 
 

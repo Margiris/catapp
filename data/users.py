@@ -1,9 +1,7 @@
 from datetime import datetime
 
 from flask_mongoengine import Document
-from mongoengine import BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, ReferenceField, LazyReferenceField, DO_NOTHING, CASCADE
-
-from data.posts import Posts
+from mongoengine import BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, ReferenceField, LazyReferenceField
 
 
 class Users(Document):
@@ -14,7 +12,7 @@ class Users(Document):
     password = StringField(required=True)
     registered_datetime = DateTimeField(default=datetime.utcnow)
 
-    posts = ListField(ReferenceField('Posts', reverse_delete_rule=DO_NOTHING))
+    posts = ListField(ReferenceField('Posts'))
     comments = ListField(ReferenceField('Comments'))
 
     def to_json(self):
@@ -35,6 +33,3 @@ class Users(Document):
         'indexes': ['name', 'email'],
         'ordering': ['-registered_datetime']
     }
-
-
-Users.register_delete_rule(Posts, 'author', CASCADE)

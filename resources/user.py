@@ -35,22 +35,19 @@ class User(Resource):
         if errors:
             abort(400, errors=errors)
 
-        name = received_json['name']
-        email = received_json['email']
         hashed_password = hash_string_with_salt(received_json['password'])
-
         try:
             new_user = Users(
                 active=True,
                 is_admin=False,
-                name=name,
-                email=email,
+                name=received_json['name'],
+                email=received_json['email'],
                 password=hashed_password,
                 registered_datetime=datetime.utcnow(),
                 posts=[],
                 comments=[]
             ).save()
-        except ValidationError as e:
+        except Exception as e:
             abort(400, errors=str(e))
 
         return {'message': "User '{}' registered successfully".format(new_user.name),
