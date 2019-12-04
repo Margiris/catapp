@@ -60,6 +60,8 @@ class User(Resource):
     def put(current_user, self, name=None):
         if name is None:
             abort(405, message="Can't PUT to this endpoint. Try /user/<username>")
+        if current_user.name != name and not current_user.is_admin:
+            abort(401, message="Missing rights.")
 
         existing_user = Users.objects(name=name).first()
         if existing_user is None:

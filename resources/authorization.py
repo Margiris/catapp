@@ -21,6 +21,10 @@ class Login(Resource):
         if not auth or not auth.username or not auth.password or user is None or not verify_password(user.password, auth.password):
             # TODO maybe abort() with headers
             return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
+
+        if not user.active:
+            abort(401, message='Your account has been banned. Please contact the moderators if you feel that was a mistake.')
+
         token = encode({
             'exp': datetime.utcnow() + timedelta(minutes=60),
             'iat': datetime.utcnow(),
@@ -59,6 +63,7 @@ def token_required(f):
             current_user = Users.objects(id=payload['sub']).first()
 
             assert current_user is not None
+            assert current_user.active is True
         except Exception as e:
             abort(401, message='Token is missing, invalid or expired')
 
@@ -74,25 +79,25 @@ def validate_values_in_dictionary(dictionary, module_class, required_keys={}, se
 
     # exclude keys with errors from further validation
     admin_keys = {key for key in admin_keys if key not in errors}
-    # check if user has rights to keys
+    # check if user has rights to keys and append to errors dict if not
     if not admin:
         errors = {**errors,
                   **{key: "Missing rights for '{}' property".format(key) for key in admin_keys if key in dictionary}}
 
-    # check if provided password is safe enough and put in errors dict if not
+    # check if provided password is safe enough and append to errors dict if not
     if len(dictionary.get('password', "12345678")) < 8:
         errors['password'] = 'Password must be at least 8 characters long'
 
     # exclude keys with errors from further validation
     sensitive_keys = {key for key in sensitive_keys if key not in errors}
-    # check for illegal characters and put in errors dict if found
+    # check for illegal characters and append to errors dict if found
     errors = {**errors,
               **{key: '{} contains illegal characters'.format(key.title()) for key in sensitive_keys if any(
                   char in dictionary.get(key, "") for char in illegal_chars)}}
 
     # exclude keys with errors from further validation
     unique_keys = {key for key in unique_keys if key not in errors}
-    # find duplicates of unique keys in database and put in errors dict if found
+    # find duplicates of unique keys in database and append to errors dict if found
     errors = {**errors,
               **{key: '{} already exists'.format(key.title()) for key in unique_keys if len(
                   module_class.objects(**{key: dictionary.get(key, "")})) >= 1}}
