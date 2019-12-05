@@ -10,8 +10,8 @@ from data.posts import Posts
 from resources.authorization import token_required, validate_values_in_dictionary
 
 
-class Post(Resource):
-    def get(self, id=None):
+class User_Post(Resource):
+    def get(self, name, id=None):
         if id is not None and (not isinstance(id, str) or len(id) != 24):
             abort(404, message="{} is not a valid post id".format(id))
 
@@ -27,7 +27,7 @@ class Post(Resource):
             return {'post': post_data[0]}, 200
 
     @token_required
-    def post(current_user, self, id=None):
+    def post(current_user, self, name, id=None):
         if id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post")
 
@@ -64,7 +64,7 @@ class Post(Resource):
         return {'message': "Post successful", 'post': new_post.to_json()}, 201
 
     @token_required
-    def put(current_user, self, id=None):
+    def put(current_user, self, name, id=None):
         if id is None:
             abort(405, message="Can't PUT to this endpoint. Try /post/<post id>")
         elif not isinstance(id, str) or len(id) != 24:
@@ -101,7 +101,7 @@ class Post(Resource):
         return {}, 204
 
     @token_required
-    def delete(current_user, self, id=None):
+    def delete(current_user, self, name, id=None):
         if id is None:
             abort(405, message="Can't DELETE at this endpoint. Try /post/<post id>")
         elif not isinstance(id, str) or len(id) != 24:

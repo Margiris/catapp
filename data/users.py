@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_mongoengine import Document
-from mongoengine import BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, ReferenceField, LazyReferenceField
+from mongoengine import BooleanField, StringField, EmailField, BinaryField, DateTimeField, ListField, ReferenceField
 
 
 class Users(Document):

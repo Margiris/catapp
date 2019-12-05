@@ -12,10 +12,15 @@ class Comments(EmbeddedDocument):
     rating = EmbeddedDocumentField('Ratings')
 
     def to_json(self):
+        try:
+            author = self.author.name
+        except:
+            author = "[deleted]"
         return {
             'id': str(self.id),
             'posted_time': str(self.posted_datetime.replace(microsecond=0)),
-            'author': self.author.name,
+            'author': author,
+            # 'author': self.author.name,
             'body': self.body,
             'rating': self.rating.score
         }
