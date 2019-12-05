@@ -9,10 +9,10 @@ pkg install git ncurses-utils python
 printf $green_text 'Setting up sudo...'
 rm -fR ~/termux-sudo
 git clone https://gitlab.com/st42/termux-sudo ~/termux-sudo
-cd ~/termux-sudo
-cat sudo > /data/data/com.termux/files/usr/bin/sudo
+
+cat ~/termux-sudo/sudo > /data/data/com.termux/files/usr/bin/sudo
 chmod 700 /data/data/com.termux/files/usr/bin/sudo
-cd ..
+
 rm -fR ~/termux-sudo
 
 # download catpic
@@ -21,15 +21,14 @@ rm -fR ~/catpic
 git clone https://github.com/Margiris/catpic ~/catpic
 git checkout dev
 
-# go to project dir
-cd ~/catpic
-cp /sdcard/secrets.py ./
+# copy secrets
+cp /sdcard/secrets.py ~/catpic/
 
 # setup python virtual environment
 printf $green_text 'Setting up python virtual environment...'
-rm -fR ./venv
-python -m venv ./venv
+rm -fR ~/catpic/venv
+python -m venv ~/catpic/venv
 
 # copy server startup script
 printf $green_text 'Creating script to start the server...'
-cp ./scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh 
+cp ~/catpic/scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh 
