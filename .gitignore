@@ -121,3 +121,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VSCode stuff
+.vscode/
+
+# GoodSync data folder
+_gsdata_/
+secrets.py
