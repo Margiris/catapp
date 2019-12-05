@@ -26,8 +26,8 @@ else
     mkdir /data/data/com.termux/files/home/tasker > NUL 2>&1
     cp ./scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh
     cp ./scripts/catpic_server_setup.sh ~/tasker/catpic_server_setup.sh
-    chmod 700 /data/data/com.termux/files/home/tasker/catpic_server_start.sh
-    chmod 700 /data/data/com.termux/files/home/tasker/catpic_server_start.sh
+    sudo chmod 700 /data/data/com.termux/files/home/tasker/catpic_server_start.sh
+    sudo chmod 700 /data/data/com.termux/files/home/tasker/catpic_server_start.sh
     printf $green_text 'Restarting script...'
     exec ~/tasker/catpic_server_start.sh
 fi
