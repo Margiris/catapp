@@ -45,11 +45,11 @@ then
     
     # kill any processes that might be occupying 8080 port
     printf $green_text 'Freeing up required port...'
-    kill $(netstat -ltnp | grep ':8080' | awk '{ print $7 }' | sed 's/[^0-9]*//g')
+    kill $(netstat -ltnp | grep ':80' | awk '{ print $7 }' | sed 's/[^0-9]*//g')
     
     #  run server
     printf $green_text 'Starting...'
-    python ./server.py
+    sudo python ./server.py
 else
     printf $red_text 'Virtual environment activation failed, current python executable:'
     printf $red_text $(which python)
