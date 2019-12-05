@@ -12,7 +12,7 @@ cd ~/termux-sudo
 cat sudo > /data/data/com.termux/files/usr/bin/sudo
 chmod 700 /data/data/com.termux/files/usr/bin/sudo
 cd ..
-rm -R ~/termux-sudo
+rm -fR ~/termux-sudo
 
 # download catpic
 printf $green_text 'Downloading project...'
@@ -25,7 +25,7 @@ cp /sdcard/secrets.py ./
 
 # setup python virtual environment
 printf $green_text 'Setting up python virtual environment...'
-rm -R ./venv
+rm -fR ./venv
 python -m venv ./venv
 
 # copy server startup script
