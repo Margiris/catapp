@@ -7,6 +7,7 @@ pkg install git ncurses-utils python
 
 # download and setup sudo
 printf $green_text 'Setting up sudo...'
+rm -fR ~/termux-sudo
 git clone https://gitlab.com/st42/termux-sudo ~/termux-sudo
 cd ~/termux-sudo
 cat sudo > /data/data/com.termux/files/usr/bin/sudo
@@ -16,6 +17,7 @@ rm -fR ~/termux-sudo
 
 # download catpic
 printf $green_text 'Downloading project...'
+rm -fR ~/catpic
 git clone https://github.com/Margiris/catpic ~/catpic
 git checkout dev
 
