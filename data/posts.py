@@ -22,7 +22,7 @@ class Posts(Document):
             'posted on': str(self.posted_datetime.replace(microsecond=0)),
             'by': self.author.name,
             'comment count': len(self.comments),
-            'score': self.rating.score
+            'rating': self.rating.score
         }
 
     meta = {

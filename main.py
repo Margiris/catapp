@@ -7,6 +7,7 @@ from secrets import app_secret_key, db_local_ip, db_debug_ip
 from resources.index import Index
 from resources.user import User
 from resources.post import Post
+from resources.comment import Comment
 from resources.authorization import Login, Logout
 
 
@@ -40,6 +41,8 @@ api.add_resource(User,  # '/users',
 api.add_resource(Post,  # '/posts',
                         '/post',
                         '/post/<string:id>', endpoint='post')
+api.add_resource(Comment,   '/post/<string:post_id>/comment',
+                            '/post/<string:post_id>/comment/<string:id>', endpoint='comment')
 
 if __name__ == "__main__":
     app.run(debug=True)
