@@ -3,7 +3,7 @@ green_text='\e[0;32m%s\n\e[m'
 
 # install dependencies
 printf $green_text 'Installing dependencies...'
-pkg install git ncurses-utils python
+pkg install git ncurses-utils python libjpeg-turbo
 
 # download and setup sudo
 printf $green_text 'Setting up sudo...'
@@ -36,5 +36,17 @@ python -m venv ~/catpic/venv
 printf $green_text 'Creating script to start the server...'
 cp ~/catpic/scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh
 chmod 700 ~/tasker/catpic_server_start.sh
+
+# activate virtual environment
+printf $green_text 'Activating virtual environment...'
+source ./venv/bin/activate
+
+# check if virtual environment activation successful
+if [ $(which python) = "/data/data/com.termux/files/home/catpic/venv/bin/python" ]
+then
+    # isntall Pillow dependency since it needs special treatment
+    printf $green_text 'Installing Pillow dependency...'
+    LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/" pip install Pillow
+fi
 
 printf $green_text 'Done.'
