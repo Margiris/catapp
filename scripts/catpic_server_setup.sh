@@ -41,7 +41,7 @@ printf $green_text 'Downloading project...'
 sudo rm -fR ~/catpic
 git clone https://github.com/Margiris/catpic.git ~/catpic
 cd ~/catpic
-git checkout dev
+git checkout master
 
 # copy and change persissions for secrets.py
 sudo cp /data/media/0/secrets.py ~/catpic/
