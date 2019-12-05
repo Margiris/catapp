@@ -15,7 +15,7 @@ git stash drop
 
 # update dev branch
 printf $green_text 'Updating dev branch...'
-git checkout dev
+git checkout master
 git pull
 
 # if scripts differ we assume that it was updated
