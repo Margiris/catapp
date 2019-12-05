@@ -42,7 +42,7 @@ class Post(Resource):
                 title=received_json['title'],
                 author=current_user,
                 comments=[],
-                rating=[]
+                rating=Ratings()
             )
 
             image64 = received_json['image']
@@ -78,11 +78,13 @@ class Post(Resource):
             abort(401, message="Missing rights.")
 
         received_json = request.get_json()
-        errors = validate_values_in_dictionary(received_json, Posts, sensitive_keys={'title'})
+        errors = validate_values_in_dictionary(
+            received_json, Posts, sensitive_keys={'title'}, admin_keys={'image'}, admin=current_user.is_admin)
         if errors:
             abort(400, errors=errors)
 
-        if received_json.get('title') is not None: existing_post.title = received_json.get('title')
+        if received_json.get('title') is not None:
+            existing_post.title = received_json.get('title')
         if received_json.get('image') is not None:
             image64 = received_json['image']
             file_like = b64decode(image64)
@@ -92,7 +94,7 @@ class Post(Resource):
                 f.write(bytes_image)
                 f.flush()
                 f.seek(0)
-                existing_post.image.put(f)
+                existing_post.image.replace(f)
 
         existing_post.save()
 
