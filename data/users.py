@@ -16,7 +16,7 @@ class Users(Document):
     comments = ListField(ReferenceField('Comments'))
 
     def to_json(self):
-        user_dict = {
+        return  {
             'status': 'active' if self.active else 'banned',
             'is_admin': self.is_admin,
             'name': self.name,
@@ -25,7 +25,6 @@ class Users(Document):
             'user post count': len(self.posts),
             'comment count': len(self.comments)
         }
-        return user_dict
 
     meta = {
         'db_alias': 'core',

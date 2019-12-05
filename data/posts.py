@@ -2,7 +2,7 @@ from datetime import datetime
 from json import dumps
 
 from flask_mongoengine import Document
-from mongoengine import StringField, ImageField, DateTimeField, ReferenceField, EmbeddedDocumentListField, CASCADE
+from mongoengine import StringField, ImageField, DateTimeField, ReferenceField, EmbeddedDocumentListField, EmbeddedDocumentField, CASCADE
 from PIL import PILLOW_VERSION
 
 
@@ -13,19 +13,18 @@ class Posts(Document):
     author = ReferenceField('Users', reverse_delete_rule=CASCADE)
 
     comments = EmbeddedDocumentListField('Comments')
-    rating = EmbeddedDocumentListField('Ratings')
+    rating = EmbeddedDocumentField('Ratings')
 
     def to_json(self):
-        post_dict = {
+        return {
             'id': str(self.id),
             'title': self.title,
             'posted on': str(self.posted_datetime.replace(microsecond=0)),
             'by': self.author.name,
             'comment count': len(self.comments),
             # TODO get score value instead of ratings object
-            'score': self.rating
+            'score': self.rating.score
         }
-        return post_dict
 
     meta = {
         'db_alias': 'core',
