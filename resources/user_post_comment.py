@@ -4,14 +4,19 @@ from flask_restful import abort, Resource
 from data.ratings import Ratings
 from data.comments import Comments
 from data.posts import Posts
+from data.users import Users
 from resources.authorization import token_required, validate_values_in_dictionary
 
-class Comment(Resource):
-    def get(self, post_id, id=None):
+class User_Post_Comment(Resource):
+    def get(self, name, post_id, id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
         if id is not None and (not isinstance(id, str) or len(id) != 24):
             abort(404, message="{} is not a valid comment id".format(id))
+
+        user_data = Users.objects(name=name).first()
+        if user_data is None:
+            abort(404, message="User '{}' doesn't exist".format(name))
 
         post_data = Posts.objects(id=post_id).first()
         if post_data is None:
@@ -19,19 +24,22 @@ class Comment(Resource):
         
         if id is None:
             comment_data = [comment.to_json() for comment in post_data.comments]
-            return {"post '{}' comments".format(post_id): comment_data}, 200
+            return {"user's '{}' post '{}' comments".format(name, post_id): comment_data}, 200
         else:
             comment_data = [comment.to_json() for comment in post_data.comments if str(comment.id) == id]
             if len(comment_data) < 1:
                 abort(404, message="Comment with id '{}' doesn't exist".format(id))
-            return {"post '{}' comment".format(post_id): comment_data[0]}, 200
+            return {"user's '{}' post '{}' comment".format(name, post_id): comment_data[0]}, 200
 
     @token_required
-    def post(current_user, self, post_id, id=None):
+    def post(current_user, self, name, post_id, id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
         if id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post/<post id>/comment")
+        
+        if current_user.name != name and not current_user.is_admin:
+            abort(401, message="Missing rights.")
 
         post_data = Posts.objects(id=post_id).first()
         if post_data is None:
@@ -60,7 +68,7 @@ class Comment(Resource):
         return {'message': "Comment posted successfully", 'comment': new_comment.to_json()}, 201
 
     @token_required
-    def put(current_user, self, post_id, id=None):
+    def put(current_user, self, name, post_id, id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
         if id is None:
@@ -94,7 +102,7 @@ class Comment(Resource):
         return {}, 204
 
     @token_required
-    def delete(current_user, self, post_id, id=None):
+    def delete(current_user, self, name, post_id, id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
         if id is None:

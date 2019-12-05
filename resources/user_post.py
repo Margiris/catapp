@@ -7,6 +7,7 @@ from flask_restful import abort, Resource
 from data.ratings import Ratings
 from data.comments import Comments
 from data.posts import Posts
+from data.users import Users
 from resources.authorization import token_required, validate_values_in_dictionary
 
 
@@ -15,21 +16,27 @@ class User_Post(Resource):
         if id is not None and (not isinstance(id, str) or len(id) != 24):
             abort(404, message="{} is not a valid post id".format(id))
 
-        kwarg = {} if id is None else {'id': id}
-        post_data = Posts.objects(**kwarg)
-        post_data = [post.to_json() for post in post_data]
+        user_data = Users.objects(name=name).first()
+        if user_data is None:
+            abort(404, message="User '{}' doesn't exist".format(name))
 
         if id is None:
-            return {'posts': post_data}, 200
+            post_data = [post.to_json() for post in user_data.posts]
+            return {"user's '{}' posts".format(name): post_data}, 200
         else:
+            post_data = [post.to_json()
+                         for post in user_data.posts if str(post.id) == id]
             if len(post_data) < 1:
                 abort(404, message="Post with id '{}' doesn't exist".format(id))
-            return {'post': post_data[0]}, 200
+            return {"user's '{}' post".format(name): post_data[0]}, 200
 
     @token_required
     def post(current_user, self, name, id=None):
         if id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post")
+
+        if current_user.name != name and not current_user.is_admin:
+            abort(401, message="Missing rights.")
 
         received_json = request.get_json()
         errors = validate_values_in_dictionary(received_json, Posts, required_keys={
