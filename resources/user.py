@@ -31,7 +31,7 @@ class User(Resource):
 
         received_json = request.get_json()
         errors = validate_values_in_dictionary(received_json, Users,
-            required_keys={'name', 'email', 'password'}, sensitive_keys={'name'}, unique_keys={'name', 'email'})
+                                               required_keys={'name', 'email', 'password'}, sensitive_keys={'name'}, unique_keys={'name', 'email'})
         if errors:
             abort(400, errors=errors)
 
@@ -70,12 +70,18 @@ class User(Resource):
         if errors:
             abort(400, errors=errors)
 
-        if received_json.get('active')      is not None: existing_user.active = bool(received_json.get('active'))
-        if received_json.get('is_admin')    is not None: existing_user.is_admin = bool(received_json.get('is_admin'))
-        if received_json.get('name')        is not None: existing_user.name = received_json.get('name')
+        if received_json.get('active') is not None:
+            existing_user.active = bool(received_json.get('active'))
+        if received_json.get('is_admin') is not None:
+            existing_user.is_admin = bool(received_json.get('is_admin'))
+        if received_json.get('name') is not None:
+            existing_user.name = received_json.get('name')
 
-        if received_json.get('email')       is not None: existing_user.email = received_json.get('email')
-        if received_json.get('password')    is not None: existing_user.password = hash_string_with_salt(received_json.get('password'))
+        if received_json.get('email') is not None:
+            existing_user.email = received_json.get('email')
+        if received_json.get('password') is not None:
+            existing_user.password = hash_string_with_salt(
+                received_json.get('password'))
 
         existing_user.save()
 

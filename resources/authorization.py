@@ -5,7 +5,7 @@ from functools import wraps
 from hashlib import sha256, pbkdf2_hmac
 from os import urandom
 
-from flask import request, make_response
+from flask import request
 from flask_restful import abort, Resource
 from jwt import encode, decode
 
@@ -20,8 +20,7 @@ class Login(Resource):
         user = Users.objects(name=auth.username).first()
 
         if not auth or not auth.username or not auth.password or user is None or not verify_password(user.password, auth.password):
-            # TODO maybe abort() with headers
-            return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
+            return {'message': 'Could not verify'}, 401, {'WWW-Authenticate': 'Basic realm="Login required"'}
 
         if not user.active:
             abort(401, message='Your account has been banned. Please contact the moderators if you feel that was a mistake.')
@@ -105,6 +104,7 @@ def validate_values_in_dictionary(dictionary, module_class, required_keys={}, se
                   module_class.objects(**{key: dictionary.get(key, "")})) >= 1}}
 
     return errors
+
 
 def logout(token):
     ExpiredTokens(
