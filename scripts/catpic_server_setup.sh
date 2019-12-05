@@ -2,7 +2,7 @@
 if [ $(pwd) != '/data/data/com.termux/files/home/tasker' ];
 then
     mv ./catpic_server_setup.sh /data/data/com.termux/files/home/
-    mkdir /data/data/com.termux/files/home/tasker > NUL
+    mkdir /data/data/com.termux/files/home/tasker > NUL 2>&1
     mv /data/data/com.termux/files/home/catpic_server_setup.sh /data/data/com.termux/files/home/tasker/
     exec ~/tasker/catpic_server_setup.sh
 fi
