@@ -1,3 +1,6 @@
+# set default home path
+export HOME=/data/data/com.termux/files/home
+
 # setup variables
 green_text='\e[0;32m%s\n\e[m'
 red_text='\e[0;31m%s\n\e[m'
@@ -49,7 +52,7 @@ then
     
     #  run server
     printf $green_text 'Starting...'
-    sudo python ./server.py
+    python ./server.py
 else
     printf $red_text 'Virtual environment activation failed, current python executable:'
     printf $red_text $(which python)
