@@ -45,8 +45,7 @@ git checkout dev
 
 # copy and change persissions for secrets.py
 sudo cp /data/media/0/secrets.py ~/catpic/
-sudo chown u0_a347:u0_a347 ~/catpic/secrets.py
-sudo chmod 640 ~/catpic/secrets.py
+sudo chmod 600 ~/catpic/secrets.py
 
 # setup python virtual environment
 printf $green_text 'Setting up python virtual environment...'
