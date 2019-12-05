@@ -22,7 +22,6 @@ class Posts(Document):
             'posted on': str(self.posted_datetime.replace(microsecond=0)),
             'by': self.author.name,
             'comment count': len(self.comments),
-            # TODO get score value instead of ratings object
             'score': self.rating.score
         }
 
