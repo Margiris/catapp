@@ -34,6 +34,7 @@ python -m venv ~/catpic/venv
 
 # copy server startup script
 printf $green_text 'Creating script to start the server...'
-cp ~/catpic/scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh 
+cp ~/catpic/scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh
+chmod 700 ~/tasker/catpic_server_start.sh
 
 printf $green_text 'Done.'
