@@ -10,6 +10,7 @@ from flask_restful import abort, Resource
 from jwt import encode, decode
 
 from data.users import Users
+from data.expired_tokens import ExpiredTokens
 from secrets import app_secret_key, token_expiration_time
 
 
@@ -54,8 +55,9 @@ def token_required(f):
     def decorated(*args, **kwargs):
         try:
             token = request.headers['authorization'][7:]
-            payload = decode(token, app_secret_key)
+            assert ExpiredTokens.objects(token=token).first() is None
 
+            payload = decode(token, app_secret_key)
             assert payload['exp'] > timegm(datetime.utcnow().utctimetuple())
             assert payload['iat'] > timegm(
                 (datetime.utcnow() - token_expiration_time).utctimetuple())
@@ -104,7 +106,16 @@ def validate_values_in_dictionary(dictionary, module_class, required_keys={}, se
 
     return errors
 
+def logout(token):
+    ExpiredTokens(
+        token=token
+    ).save()
+
 
 class Logout(Resource):
-    def get(self):
-        return {}
+    @token_required
+    def get(current_user, self):
+        token = request.headers['authorization'][7:]
+        logout(token)
+
+        return {}, 204

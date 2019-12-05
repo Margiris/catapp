@@ -11,7 +11,7 @@ from data.users import Users
 from resources.authorization import token_required, validate_values_in_dictionary
 
 
-class User_Post(Resource):
+class UserPost(Resource):
     def get(self, name, id=None):
         if id is not None and (not isinstance(id, str) or len(id) != 24):
             abort(404, message="{} is not a valid post id".format(id))

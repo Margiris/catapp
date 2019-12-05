@@ -7,7 +7,7 @@ from data.posts import Posts
 from data.users import Users
 from resources.authorization import token_required, validate_values_in_dictionary
 
-class User_Post_Comment(Resource):
+class UserPostComment(Resource):
     def get(self, name, post_id, id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
