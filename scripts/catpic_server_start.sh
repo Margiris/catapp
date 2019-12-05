@@ -17,16 +17,16 @@ git pull
 
 # if scripts differ we assume that it was updated
 printf $green_text 'Checking for a new version...'
-if cmp -s ~/.termux/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh && cmp -s ~/.termux/tasker/catpic_server_setup.sh ./scripts/catpic_server_setup.sh;
+if cmp -s ~/tasker/catpic_server_start.sh ./scripts/catpic_server_start.sh && cmp -s ~/tasker/catpic_server_setup.sh ./scripts/catpic_server_setup.sh;
 then
     printf $green_text 'No new version found, continuing'
 else
     # copy new script in place of older one then exec it
     printf $green_text 'Found new version, updating...'
-    cp ./scripts/catpic_server_start.sh ~/.termux/tasker/catpic_server_start.sh
-    cp ./scripts/catpic_server_setup.sh ~/.termux/tasker/catpic_server_setup.sh
+    cp ./scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh
+    cp ./scripts/catpic_server_setup.sh ~/tasker/catpic_server_setup.sh
     printf $green_text 'Restarting script...'
-    exec ~/.termux/tasker/catpic_server_start.sh
+    exec ~/tasker/catpic_server_start.sh
 fi
 
 # activate virtual environment

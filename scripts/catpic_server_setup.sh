@@ -1,6 +1,5 @@
 # setup variables
 green_text='\e[0;32m%s\n\e[m'
-red_text='\e[0;31m%s\n\e[m'
 
 # install dependencies
 printf $green_text 'Installing dependencies...'
@@ -28,3 +27,7 @@ cp /sdcard/secrets.py ./
 printf $green_text 'Setting up python virtual environment...'
 rm -R ./venv
 python -m venv ./venv
+
+# copy server startup script
+printf $green_text 'Creating script to start the server...'
+cp ./scripts/catpic_server_start.sh ~/tasker/catpic_server_start.sh 
