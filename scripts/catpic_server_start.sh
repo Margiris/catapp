@@ -1,3 +1,5 @@
+# make sure to run as root with sudo !
+
 # set default home path
 export HOME=/data/data/com.termux/files/home
 
@@ -35,9 +37,7 @@ else
     exec ~/tasker/catpic_server_start.sh
 fi
 
-# activate root shell, then virtual environment
-printf $green_text 'Starting root shell...'
-sudo su
+# activate virtual environment
 printf $green_text 'Activating virtual environment...'
 source ./venv/bin/activate
 
