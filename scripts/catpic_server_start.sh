@@ -35,7 +35,9 @@ else
     exec ~/tasker/catpic_server_start.sh
 fi
 
-# activate virtual environment
+# activate root shell, then virtual environment
+printf $green_text 'Starting root shell...'
+sudo su
 printf $green_text 'Activating virtual environment...'
 source ./venv/bin/activate
 
