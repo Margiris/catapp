@@ -44,10 +44,10 @@ api.add_resource(User,              # '/users',
 
 api.add_resource(Post,              # '/posts',
                                     '/post',
-                                    '/post/<string:id>', endpoint='post')
+                                    '/post/<string:post_id>', endpoint='post')
 
 api.add_resource(Comment,           '/post/<string:post_id>/comment',
-                                    '/post/<string:post_id>/comment/<string:id>', endpoint='comment')
+                                    '/post/<string:post_id>/comment/<string:comment_id>', endpoint='comment')
 
 api.add_resource(UserPost,         '/user/<string:name>/post',
                                     '/user/<string:name>/post/<string:id>', endpoint='user_post')

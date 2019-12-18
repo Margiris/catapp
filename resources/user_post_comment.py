@@ -8,11 +8,11 @@ from data.users import Users
 from resources.authorization import token_required, validate_values_in_dictionary
 
 class UserPostComment(Resource):
-    def get(self, name, post_id, id=None):
+    def get(self, name, post_id, comment_id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
-        if id is not None and (not isinstance(id, str) or len(id) != 24):
-            abort(404, message="{} is not a valid comment id".format(id))
+        if comment_id is not None and (not isinstance(comment_id, str) or len(comment_id) != 24):
+            abort(404, message="{} is not a valid comment id".format(comment_id))
 
         user_data = Users.objects(name=name).first()
         if user_data is None:
@@ -22,20 +22,20 @@ class UserPostComment(Resource):
         if post_data is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
         
-        if id is None:
+        if comment_id is None:
             comment_data = [comment.to_json() for comment in post_data.comments]
             return {"user's '{}' post '{}' comments".format(name, post_id): comment_data}, 200
         else:
-            comment_data = [comment.to_json() for comment in post_data.comments if str(comment.id) == id]
+            comment_data = [comment.to_json() for comment in post_data.comments if str(comment.oid) == comment_id]
             if len(comment_data) < 1:
-                abort(404, message="Comment with id '{}' doesn't exist".format(id))
+                abort(404, message="Comment with id '{}' doesn't exist".format(comment_id))
             return {"user's '{}' post '{}' comment".format(name, post_id): comment_data[0]}, 200
 
     @token_required
-    def post(current_user, self, name, post_id, id=None):
+    def post(current_user, self, name, post_id, comment_id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
-        if id is not None:
+        if comment_id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post/<post id>/comment")
         
         if current_user.name != name and not current_user.is_admin:
@@ -61,28 +61,28 @@ class UserPostComment(Resource):
 
             current_user.comments.append(new_comment)
             # TODO fix saving comments to user
-            # current_user.save()
+            current_user.save()
         except Exception as e:
             abort(400, errors=str(e))
 
         return {'message': "Comment posted successfully", 'comment': new_comment.to_json()}, 201
 
     @token_required
-    def put(current_user, self, name, post_id, id=None):
+    def put(current_user, self, name, post_id, comment_id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
-        if id is None:
+        if comment_id is None:
             abort(405, message="Can't PUT to this endpoint. Try /post/<post id>/comment/<comment id>")
-        elif not isinstance(id, str) or len(id) != 24:
-            abort(404, message="{} is not a valid comment id".format(id))
+        elif not isinstance(comment_id, str) or len(comment_id) != 24:
+            abort(404, message="{} is not a valid comment id".format(comment_id))
 
         existing_post = Posts.objects(id=post_id).first()
         if existing_post is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
 
-        existing_comment = [comment for comment in existing_post.comments if str(comment.id) == id]
+        existing_comment = [comment for comment in existing_post.comments if str(comment.oid) == comment_id]
         if len(existing_comment) < 1:
-            abort(404, message="Comment with id '{}' doesn't exist".format(id))
+            abort(404, message="Comment with id '{}' doesn't exist".format(comment_id))
         else:
             existing_comment = existing_comment[0]
          
@@ -114,7 +114,7 @@ class UserPostComment(Resource):
         if existing_post is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
 
-        existing_comment = [comment for comment in existing_post.comments if str(comment.id) == id]
+        existing_comment = [comment for comment in existing_post.comments if str(comment.oid) == id]
         if len(existing_comment) < 1:
             abort(404, message="Comment with id '{}' doesn't exist".format(id))
         else:
@@ -127,7 +127,7 @@ class UserPostComment(Resource):
         existing_post.save()
 
         # TODO fix saving comments to user
-        # existing_comment.author.comments.remove(existing_comment)
+        existing_comment.author.comments.remove(existing_comment)
         existing_comment.author.save()
 
         return {}, 204

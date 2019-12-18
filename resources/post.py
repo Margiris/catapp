@@ -11,24 +11,24 @@ from resources.authorization import token_required, validate_values_in_dictionar
 
 
 class Post(Resource):
-    def get(self, id=None):
-        if id is not None and (not isinstance(id, str) or len(id) != 24):
-            abort(404, message="{} is not a valid post id".format(id))
+    def get(self, post_id=None):
+        if post_id is not None and (not isinstance(post_id, str) or len(post_id) != 24):
+            abort(404, message="{} is not a valid post id".format(post_id))
 
-        kwarg = {} if id is None else {'id': id}
+        kwarg = {} if post_id is None else {'id': post_id}
         post_data = Posts.objects(**kwarg)
         post_data = [post.to_json() for post in post_data]
 
-        if id is None:
+        if post_id is None:
             return {'posts': post_data}, 200
         else:
             if len(post_data) < 1:
-                abort(404, message="Post with id '{}' doesn't exist".format(id))
+                abort(404, message="Post with id '{}' doesn't exist".format(post_id))
             return {'post': post_data[0]}, 200
 
     @token_required
-    def post(current_user, self, id=None):
-        if id is not None:
+    def post(current_user, self, post_id=None):
+        if post_id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post")
 
         received_json = request.get_json()
@@ -64,15 +64,15 @@ class Post(Resource):
         return {'message': "Post successful", 'post': new_post.to_json()}, 201
 
     @token_required
-    def put(current_user, self, id=None):
-        if id is None:
+    def put(current_user, self, post_id=None):
+        if post_id is None:
             abort(405, message="Can't PUT to this endpoint. Try /post/<post id>")
-        elif not isinstance(id, str) or len(id) != 24:
-            abort(404, message="{} is not a valid post id".format(id))
+        elif not isinstance(post_id, str) or len(post_id) != 24:
+            abort(404, message="{} is not a valid post post_id".format(post_id))
 
-        existing_post = Posts.objects(id=id).first()
+        existing_post = Posts.objects(post_id=post_id).first()
         if existing_post is None:
-            abort(404, message="Post with id '{}' doesn't exist".format(id))
+            abort(404, message="Post with post_id '{}' doesn't exist".format(post_id))
 
         if current_user != existing_post.author and not current_user.is_admin:
             abort(401, message="Missing rights.")
@@ -101,15 +101,15 @@ class Post(Resource):
         return {}, 204
 
     @token_required
-    def delete(current_user, self, id=None):
-        if id is None:
-            abort(405, message="Can't DELETE at this endpoint. Try /post/<post id>")
-        elif not isinstance(id, str) or len(id) != 24:
-            abort(404, message="{} is not a valid post id".format(id))
+    def delete(current_user, self, post_id=None):
+        if post_id is None:
+            abort(405, message="Can't DELETE at this endpoint. Try /post/<post post_id>")
+        elif not isinstance(post_id, str) or len(post_id) != 24:
+            abort(404, message="{} is not a valid post post_id".format(post_id))
 
-        existing_post = Posts.objects(id=id).first()
+        existing_post = Posts.objects(post_id=post_id).first()
         if existing_post is None:
-            abort(404, message="Post '{}' doesn't exist".format(id))
+            abort(404, message="Post '{}' doesn't exist".format(post_id))
 
         if current_user.name != existing_post.author.name and not current_user.is_admin:
             abort(401, message="Missing rights.")
