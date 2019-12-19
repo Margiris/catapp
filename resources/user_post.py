@@ -12,27 +12,27 @@ from resources.authorization import token_required, validate_values_in_dictionar
 
 
 class UserPost(Resource):
-    def get(self, name, id=None):
-        if id is not None and (not isinstance(id, str) or len(id) != 24):
-            abort(404, message="{} is not a valid post id".format(id))
+    def get(self, name, post_id=None):
+        if post_id is not None and (not isinstance(post_id, str) or len(post_id) != 24):
+            abort(404, message="{} is not a valid post id".format(post_id))
 
         user_data = Users.objects(name=name).first()
         if user_data is None:
             abort(404, message="User '{}' doesn't exist".format(name))
 
-        if id is None:
+        if post_id is None:
             post_data = [post.to_json() for post in user_data.posts]
             return {"user's '{}' posts".format(name): post_data}, 200
         else:
             post_data = [post.to_json()
-                         for post in user_data.posts if str(post.id) == id]
+                         for post in user_data.posts if str(post.id) == post_id]
             if len(post_data) < 1:
-                abort(404, message="Post with id '{}' doesn't exist".format(id))
+                abort(404, message="Post with id '{}' doesn't exist".format(post_id))
             return {"user's '{}' post".format(name): post_data[0]}, 200
 
     @token_required
-    def post(current_user, self, name, id=None):
-        if id is not None:
+    def post(current_user, self, name, post_id=None):
+        if post_id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post")
 
         if current_user.name != name and not current_user.is_admin:
@@ -71,15 +71,15 @@ class UserPost(Resource):
         return {'message': "Post successful", 'post': new_post.to_json()}, 201
 
     @token_required
-    def put(current_user, self, name, id=None):
-        if id is None:
+    def put(current_user, self, name, post_id=None):
+        if post_id is None:
             abort(405, message="Can't PUT to this endpoint. Try /post/<post id>")
-        elif not isinstance(id, str) or len(id) != 24:
-            abort(404, message="{} is not a valid post id".format(id))
+        elif not isinstance(post_id, str) or len(post_id) != 24:
+            abort(404, message="{} is not a valid post id".format(post_id))
 
-        existing_post = Posts.objects(id=id).first()
+        existing_post = Posts.objects(id=post_id).first()
         if existing_post is None:
-            abort(404, message="Post with id '{}' doesn't exist".format(id))
+            abort(404, message="Post with id '{}' doesn't exist".format(post_id))
 
         if current_user != existing_post.author and not current_user.is_admin:
             abort(401, message="Missing rights.")
@@ -108,15 +108,15 @@ class UserPost(Resource):
         return {}, 204
 
     @token_required
-    def delete(current_user, self, name, id=None):
-        if id is None:
+    def delete(current_user, self, name, post_id=None):
+        if post_id is None:
             abort(405, message="Can't DELETE at this endpoint. Try /post/<post id>")
-        elif not isinstance(id, str) or len(id) != 24:
-            abort(404, message="{} is not a valid post id".format(id))
+        elif not isinstance(post_id, str) or len(post_id) != 24:
+            abort(404, message="{} is not a valid post id".format(post_id))
 
-        existing_post = Posts.objects(id=id).first()
+        existing_post = Posts.objects(id=post_id).first()
         if existing_post is None:
-            abort(404, message="Post '{}' doesn't exist".format(id))
+            abort(404, message="Post '{}' doesn't exist".format(post_id))
 
         if current_user.name != existing_post.author.name and not current_user.is_admin:
             abort(401, message="Missing rights.")

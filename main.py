@@ -4,7 +4,6 @@ from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
 from secrets import app_secret_key, db_local_ip, db_debug_ip
 
-from resources.index import Index
 from resources.user import User
 from resources.post import Post
 from resources.user_post import UserPost
@@ -34,7 +33,6 @@ api = Api(app, catch_all_404s=True)  # , errors=errors)
 db = MongoEngine(app)
 app.session_interface = MongoEngineSessionInterface(db)
 
-api.add_resource(Index,             '/', endpoint='index')
 api.add_resource(Login,             '/login', endpoint='login')
 api.add_resource(Logout,            '/logout', endpoint='logout')
 
@@ -49,10 +47,10 @@ api.add_resource(Post,              # '/posts',
 api.add_resource(Comment,           '/post/<string:post_id>/comment',
                                     '/post/<string:post_id>/comment/<string:comment_id>', endpoint='comment')
 
-api.add_resource(UserPost,         '/user/<string:name>/post',
-                                    '/user/<string:name>/post/<string:id>', endpoint='user_post')
+api.add_resource(UserPost,          '/user/<string:name>/post',
+                                    '/user/<string:name>/post/<string:post_id>', endpoint='user_post')
 
-api.add_resource(UserPostComment, '/user/<string:name>/post/<string:post_id>/comment',
-                                    '/user/<string:name>/post/<string:post_id>/comment/<string:id>', endpoint='user_post_comment')
+api.add_resource(UserPostComment,   '/user/<string:name>/post/<string:post_id>/comment',
+                                    '/user/<string:name>/post/<string:post_id>/comment/<string:comment_id>', endpoint='user_post_comment')
 if __name__ == "__main__":
     app.run(debug=True)

@@ -102,21 +102,21 @@ class UserPostComment(Resource):
         return {}, 204
 
     @token_required
-    def delete(current_user, self, name, post_id, id=None):
+    def delete(current_user, self, name, post_id, comment_id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
-        if id is None:
+        if comment_id is None:
             abort(405, message="Can't DELETE at this endpoint. Try /post/<post id>/comment/<comment id>")
-        elif not isinstance(id, str) or len(id) != 24:
-            abort(404, message="{} is not a valid comment id".format(id))
+        elif not isinstance(comment_id, str) or len(comment_id) != 24:
+            abort(404, message="{} is not a valid comment id".format(comment_id))
 
         existing_post = Posts.objects(id=post_id).first()
         if existing_post is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
 
-        existing_comment = [comment for comment in existing_post.comments if str(comment.oid) == id]
+        existing_comment = [comment for comment in existing_post.comments if str(comment.oid) == comment_id]
         if len(existing_comment) < 1:
-            abort(404, message="Comment with id '{}' doesn't exist".format(id))
+            abort(404, message="Comment with id '{}' doesn't exist".format(comment_id))
         else:
             existing_comment = existing_comment[0]
          
