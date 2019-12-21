@@ -12,7 +12,7 @@ class PostList extends React.Component {
     }
 
     componentDidMount() {
-        fetch("/post").then(response =>
+        fetch("http://catpicAPI.margiris.site:5000/post").then(response =>
             response.json().then(data => {
                 this.setState({ posts: data.posts });
             })

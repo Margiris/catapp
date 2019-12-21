@@ -22,7 +22,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:5000",
+  "homepage": "http://catpic.margiris.site",
   "browserslist": {
     "production": [
       ">0.2%",
