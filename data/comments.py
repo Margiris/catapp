@@ -5,7 +5,7 @@ from mongoengine import EmbeddedDocument, ObjectIdField, DateTimeField, Referenc
 
 
 class Comments(EmbeddedDocument):
-    oid = ObjectIdField(primary_key=True, default=ObjectId)
+    id = ObjectIdField(default=ObjectId, primary_key=True)
     posted_datetime = DateTimeField(default=datetime.utcnow)
     author = ReferenceField('Users')
     body = StringField(required=True)
@@ -17,10 +17,9 @@ class Comments(EmbeddedDocument):
         except:
             author = "[deleted]"
         return {
-            'id': str(self.oid),
+            'id': str(self.id),
             'posted_time': str(self.posted_datetime.replace(microsecond=0)),
             'author': author,
-            # 'author': self.author.name,
             'body': self.body,
             'rating': self.rating.score
         }

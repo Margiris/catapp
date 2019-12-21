@@ -19,9 +19,9 @@ class Posts(Document):
         return {
             'id': str(self.id),
             'title': self.title,
-            'posted on': str(self.posted_datetime.replace(microsecond=0)),
-            'by': self.author.name,
-            'comment count': len(self.comments),
+            'posted_on': str(self.posted_datetime.replace(microsecond=0)),
+            'author': self.author.name,
+            'comment_count': len(self.comments),
             'rating': self.rating.score
         }
 

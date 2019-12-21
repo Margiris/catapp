@@ -7,6 +7,7 @@ from data.posts import Posts
 from data.users import Users
 from resources.authorization import token_required, validate_values_in_dictionary
 
+
 class UserPostComment(Resource):
     def get(self, name, post_id, comment_id=None):
         if not isinstance(post_id, str) or len(post_id) != 24:
@@ -21,14 +22,17 @@ class UserPostComment(Resource):
         post_data = Posts.objects(id=post_id).first()
         if post_data is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
-        
+
         if comment_id is None:
-            comment_data = [comment.to_json() for comment in post_data.comments]
+            comment_data = [comment.to_json()
+                            for comment in post_data.comments]
             return {"user's '{}' post '{}' comments".format(name, post_id): comment_data}, 200
         else:
-            comment_data = [comment.to_json() for comment in post_data.comments if str(comment.oid) == comment_id]
+            comment_data = [comment.to_json() for comment in post_data.comments if str(
+                comment.id) == comment_id]
             if len(comment_data) < 1:
-                abort(404, message="Comment with id '{}' doesn't exist".format(comment_id))
+                abort(
+                    404, message="Comment with id '{}' doesn't exist".format(comment_id))
             return {"user's '{}' post '{}' comment".format(name, post_id): comment_data[0]}, 200
 
     @token_required
@@ -37,16 +41,17 @@ class UserPostComment(Resource):
             abort(404, message="{} is not a valid post id".format(post_id))
         if comment_id is not None:
             abort(405, message="Can't POST to this endpoint. Try /post/<post id>/comment")
-        
+
         if current_user.name != name and not current_user.is_admin:
             abort(401, message="Missing rights.")
 
         post_data = Posts.objects(id=post_id).first()
         if post_data is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
-        
+
         received_json = request.get_json()
-        errors = validate_values_in_dictionary(received_json, Comments, required_keys={'body'})
+        errors = validate_values_in_dictionary(
+            received_json, Comments, required_keys={'body'})
         if errors:
             abort(400, errors=errors)
 
@@ -72,7 +77,8 @@ class UserPostComment(Resource):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
         if comment_id is None:
-            abort(405, message="Can't PUT to this endpoint. Try /post/<post id>/comment/<comment id>")
+            abort(
+                405, message="Can't PUT to this endpoint. Try /post/<post id>/comment/<comment id>")
         elif not isinstance(comment_id, str) or len(comment_id) != 24:
             abort(404, message="{} is not a valid comment id".format(comment_id))
 
@@ -80,14 +86,15 @@ class UserPostComment(Resource):
         if existing_post is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
 
-        existing_comment = [comment for comment in existing_post.comments if str(comment.oid) == comment_id]
+        existing_comment = [
+            comment for comment in existing_post.comments if str(comment.id) == comment_id]
         if len(existing_comment) < 1:
             abort(404, message="Comment with id '{}' doesn't exist".format(comment_id))
         else:
             existing_comment = existing_comment[0]
-         
+
         if current_user != existing_comment.author and not current_user.is_admin:
-            abort(401, message="Missing rights.")  
+            abort(401, message="Missing rights.")
 
         received_json = request.get_json()
         errors = validate_values_in_dictionary(received_json, Comments)
@@ -106,7 +113,8 @@ class UserPostComment(Resource):
         if not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post id".format(post_id))
         if comment_id is None:
-            abort(405, message="Can't DELETE at this endpoint. Try /post/<post id>/comment/<comment id>")
+            abort(
+                405, message="Can't DELETE at this endpoint. Try /post/<post id>/comment/<comment id>")
         elif not isinstance(comment_id, str) or len(comment_id) != 24:
             abort(404, message="{} is not a valid comment id".format(comment_id))
 
@@ -114,12 +122,13 @@ class UserPostComment(Resource):
         if existing_post is None:
             abort(404, message="Post with id '{}' doesn't exist".format(post_id))
 
-        existing_comment = [comment for comment in existing_post.comments if str(comment.oid) == comment_id]
+        existing_comment = [
+            comment for comment in existing_post.comments if str(comment.id) == comment_id]
         if len(existing_comment) < 1:
             abort(404, message="Comment with id '{}' doesn't exist".format(comment_id))
         else:
             existing_comment = existing_comment[0]
-         
+
         if current_user != existing_comment.author and not current_user.is_admin:
             abort(401, message="Missing rights.")
 

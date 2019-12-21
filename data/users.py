@@ -16,14 +16,14 @@ class Users(Document):
     comments = ListField(ReferenceField('Comments'))
 
     def to_json(self):
-        return  {
+        return {
             'status': 'active' if self.active else 'banned',
             'is_admin': self.is_admin,
             'name': self.name,
             'email': self.email,
-            'registered on': str(self.registered_datetime.replace(microsecond=0)),
-            'user post count': len(self.posts),
-            'comment count': len(self.comments)
+            'registered_on': str(self.registered_datetime.replace(microsecond=0)),
+            'user_post_count': len(self.posts),
+            'comment_count': len(self.comments)
         }
 
     meta = {

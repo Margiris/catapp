@@ -13,7 +13,7 @@ from resources.authorization import token_required, validate_values_in_dictionar
 class Post(Resource):
     def get(self, post_id=None):
         if post_id is not None and (not isinstance(post_id, str) or len(post_id) != 24):
-            abort(404, message="{} is not a valid post id".format(post_id))
+            abort(400, message="{} is not a valid post id".format(post_id))
 
         kwarg = {} if post_id is None else {'id': post_id}
         post_data = Posts.objects(**kwarg)
@@ -70,7 +70,7 @@ class Post(Resource):
         elif not isinstance(post_id, str) or len(post_id) != 24:
             abort(404, message="{} is not a valid post post_id".format(post_id))
 
-        existing_post = Posts.objects(post_id=post_id).first()
+        existing_post = Posts.objects(id=post_id).first()
         if existing_post is None:
             abort(404, message="Post with post_id '{}' doesn't exist".format(post_id))
 
@@ -105,9 +105,9 @@ class Post(Resource):
         if post_id is None:
             abort(405, message="Can't DELETE at this endpoint. Try /post/<post post_id>")
         elif not isinstance(post_id, str) or len(post_id) != 24:
-            abort(404, message="{} is not a valid post post_id".format(post_id))
+            abort(400, message="{} is not a valid post post_id".format(post_id))
 
-        existing_post = Posts.objects(post_id=post_id).first()
+        existing_post = Posts.objects(id=post_id).first()
         if existing_post is None:
             abort(404, message="Post '{}' doesn't exist".format(post_id))
 
