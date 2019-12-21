@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
-import { Posts } from "./components/Posts";
-import { Container } from "semantic-ui-react";
+
+import TopMenu from "./components/TopMenu";
+import PostList from "./components/PostList";
+import PostWithComments from "./components/PostWithComments";
+import UserList from "./components/UserList";
 
 function App() {
-    const [posts, setPosts] = useState([]);
-
-    useEffect(() => {
-        fetch("/post").then(response =>
-            response.json().then(data => {
-                setPosts(data.posts);
-            })
-        );
-    }, []);
-
-    console.log(posts);
-
     return (
-        <Container style={{ marginTop: 40 }}>
-            <Posts posts={posts} />
-        </Container>
+        <div>
+            <TopMenu />
+            <BrowserRouter>
+                <Route exact path="/" component={PostList} />
+                <Route path="/post/:post_id" component={PostWithComments} />
+                <Route path="/user/:name" component={UserList} />
+            </BrowserRouter>
+        </div>
     );
 }
 

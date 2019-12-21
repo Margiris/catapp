@@ -45,3 +45,21 @@
 .Card {
     max-width: 650px !important;
 }
+
+.a {
+    color: inherit;
+}
+
+.a:hover {
+    color: #1e70bf;
+}
+
+div.sticky {
+    background-color: white;
+    position: -webkit-sticky;
+    position: sticky;
+    left: 1px;
+    right: 1px;
+    top: 0;
+    z-index: 99;
+}
