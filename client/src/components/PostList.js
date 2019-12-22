@@ -12,7 +12,7 @@ class PostList extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://127.0.0.1:5000/post").then(response =>
+        fetch("http://api.catpic.margiris.site:5000/post").then(response =>
             response.json().then(data => {
                 this.setState({ posts: data.posts });
             })
