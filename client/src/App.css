@@ -54,12 +54,52 @@
     color: #1e70bf;
 }
 
-div.sticky {
+.main-container {
+    margin-top: 4em;
+    margin-bottom: 2em;
+}
+
+.sticky {
     background-color: white;
     position: -webkit-sticky;
     position: sticky;
-    left: 1px;
-    right: 1px;
     top: 0;
-    z-index: 99;
+    z-index: 9;
 }
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(51, 51, 51, 0.7);
+    z-index: 10;
+}
+
+svg {
+    fill: white;
+}
+
+@media only screen and (max-width: 767px) {
+    .ui.stackable.menu .item:not(.header) {
+        display: none;
+    }
+
+    .bars {
+        padding-right: 2em;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .bars {
+        display: none !important;
+    }
+}
+
+/* .ui.grid {
+    padding: 0 !important;
+}
+.pushable.segment {
+    margin: 0 !important;
+} */

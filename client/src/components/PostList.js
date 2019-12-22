@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "semantic-ui-react";
+import { Container, Loader } from "semantic-ui-react";
 
 import Post from "./Post";
 
@@ -12,7 +12,9 @@ class PostList extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://api.catpic.margiris.site:5000/post").then(response =>
+        const url = "http://api.catpic.margiris.site:5000/post";
+
+        fetch(url).then(response =>
             response.json().then(data => {
                 this.setState({ posts: data.posts });
             })
@@ -20,9 +22,12 @@ class PostList extends React.Component {
     }
 
     render() {
+        const { posts } = this.state;
+
         return (
-            <Container style={{ marginTop: 30, marginBottom: 40 }}>
-                {this.state.posts.map(post => {
+            <Container className="main-container">
+                <Loader inline="centered" active={posts === []} />
+                {posts.map(post => {
                     return <Post key={post.id} post={post} />;
                 })}
             </Container>
