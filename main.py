@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
+from flask_cors import CORS
 
 from secrets import app_secret_key, db_local_ip, db_debug_ip
 
@@ -13,6 +14,7 @@ from resources.authorization import Login, Logout
 
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SECRET_KEY'] = app_secret_key
 app.config['MONGODB_SETTINGS'] = {
