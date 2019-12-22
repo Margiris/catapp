@@ -21,14 +21,14 @@ class Comment(Resource):
         if comment_id is None:
             comment_data = [comment.to_json()
                             for comment in post_data.comments]
-            return {"post '{}' comments".format(post_id): comment_data}, 200
+            return {"comments": comment_data}, 200
         else:
             comment_data = [comment.to_json() for comment in post_data.comments if str(
                 comment.id) == comment_id]
             if len(comment_data) < 1:
                 abort(
                     404, message="Comment with id '{}' doesn't exist".format(comment_id))
-            return {"post '{}' comment".format(post_id): comment_data[0]}, 200
+            return {"comment": comment_data[0]}, 200
 
     @token_required
     def post(current_user, self, post_id, comment_id=None):
