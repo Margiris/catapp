@@ -98,7 +98,36 @@ export default class TopMenu extends React.Component {
         this.state = { activeItem: "home", visible: false };
     }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    componentWillUnmount() {
+        this.unlisten();
+    }
+
+    toggleSidenav = () => {
+        const { sidebar_visible } = this.state;
+
+        document.getElementById("mySidenav").style.left = sidebar_visible
+            ? "-60vw"
+            : "0";
+        this.setState({ sidebar_visible: !sidebar_visible });
+    };
+
+    handleNavigation = location => {
+        this.state.activeItem = location.pathname.includes("post")
+            ? "post"
+            : "home";
+        this.state.post_id = location.pathname.slice(6);
+    };
+
+    handleItemClick = (e, { name }) => {
+        this.setState({ activeItem: name });
+
+        if (name === "post" && this.state.post_id.length === 24) {
+            this.props.history.push("/post/" + this.state.post_id);
+        } else if (name === "home") {
+            this.props.history.push("/");
+        }
+    };
+
     setVisible = v => this.setState({ visible: v });
 
     render() {
