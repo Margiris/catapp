@@ -1,12 +1,5 @@
 import React from "react";
-import {
-    Comment,
-    Header,
-    Form,
-    Button,
-    Icon,
-    Container
-} from "semantic-ui-react";
+import { Comment, Header, Form, Button, Icon } from "semantic-ui-react";
 
 class CommentForm extends React.Component {
     constructor(props) {
@@ -85,7 +78,10 @@ export default class CommentList extends React.Component {
             postRef: props.parent,
             commentBody: "",
             comments: [],
-            url: "http://localhost:5000/post/" + props.post_id + "/comment"
+            url:
+                "http://api.catpic.margiris.site:5000/post/" +
+                props.post_id +
+                "/comment"
         };
     }
 
