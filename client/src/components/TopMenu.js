@@ -192,7 +192,7 @@ export default class TopMenu extends React.Component {
                         <Icon name="list" />
                         Post
                     </Menu.Item>
-                    <Menu.Item style={{ minWidth: "20.5em" }}>
+                    <Menu.Item style={{ minWidth: "15em" }}>
                         <Input
                             fluid
                             action
