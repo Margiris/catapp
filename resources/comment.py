@@ -58,7 +58,7 @@ class Comment(Resource):
 
             current_user.comments.append(new_comment)
             # TODO fix saving comments to user
-            current_user.save()
+            # current_user.save()
         except Exception as e:
             abort(400, errors=str(e))
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Card, Icon, Modal, Container } from "semantic-ui-react";
+import { Image, Card, Icon, Modal } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 
 import CommentList from "./CommentList";
@@ -53,7 +53,7 @@ class Post extends React.Component {
                 >
                     <Modal.Content>
                         <Post post={post} />
-                        <CommentList post_id={post.id} />
+                        <CommentList parent={this} post_id={post.id} />
                     </Modal.Content>
                 </Modal>
             </Card>

@@ -81,8 +81,12 @@ svg {
     fill: white;
 }
 
+.an-error {
+    color: red !important;
+}
+
 @media only screen and (max-width: 767px) {
-    .ui.stackable.menu .item:not(.header) {
+    .ui.inverted.menu .item:not(.header) {
         display: none;
     }
 

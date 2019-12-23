@@ -1,43 +1,7 @@
 import React from "react";
-import {
-    Icon,
-    Image,
-    Menu,
-    Responsive,
-    Sidebar,
-    Button,
-    Segment,
-    Container
-} from "semantic-ui-react";
+import { Icon, Menu, Container } from "semantic-ui-react";
+import LoginModal from "./LoginModal";
 
-const HeaderMenu = ({ activeItem, handleItemClick }) => (
-    <Container>
-        <Menu.Item header>
-            <Image
-                src="/cat.svg"
-                height="15px"
-                style={{ marginRight: "0.5em" }}
-            />
-            CatPic
-        </Menu.Item>
-        <Menu.Item
-            name="home"
-            active={activeItem === "home"}
-            onClick={handleItemClick}
-        >
-            <Icon name="home" />
-            Home
-        </Menu.Item>
-        <Menu.Item
-            name="user"
-            active={activeItem === "user"}
-            onClick={handleItemClick}
-        >
-            <Icon name="user" />
-            My Profile
-        </Menu.Item>
-    </Container>
-);
 //     <Menu icon="labeled" pointing secondary>
 //         <Menu.Item header>
 //             <span style={{ display: "flex" }}>
@@ -146,7 +110,6 @@ export default class TopMenu extends React.Component {
                 pointing
                 secondary
                 inverted
-                stackable
                 style={{ backgroundColor: "#1b1c1d" }}
             >
                 <Container>
@@ -189,6 +152,11 @@ export default class TopMenu extends React.Component {
                         <Icon name="user" />
                         My Profile
                     </Menu.Item>
+                    <Menu.Menu position="right">
+                        <Menu.Item header>
+                            <LoginModal />
+                        </Menu.Item>
+                    </Menu.Menu>
                 </Container>
             </Menu>
         );

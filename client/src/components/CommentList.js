@@ -1,48 +1,88 @@
-import React, { useState } from "react";
-import { Comment, Header, Form, Button, Icon, Input } from "semantic-ui-react";
+import React from "react";
+import {
+    Comment,
+    Header,
+    Form,
+    Button,
+    Icon,
+    Container
+} from "semantic-ui-react";
 
-const CommentForm = () => {
-    const [commentBody, setCommentBody] = useState("");
+class CommentForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            postRef: props.postRef,
+            parent: props.parent,
+            commentBody: "",
+            loggedIn:
+                localStorage.getItem("jwtToken") !== null &&
+                localStorage.getItem("jwtToken").length === 172,
+            url: props.url
+        };
+    }
+    render() {
+        const { url, commentBody, loggedIn, parent, postRef } = this.state;
 
-    return (
-        <Form reply>
-            <Form.TextArea
-                // style={{ width: "100%" }}
-                value={commentBody}
-                onChange={e => {
-                    setCommentBody(e.currentTarget.value);
-                }}
-            />
-            <Button
-                content="Post Comment"
-                labelPosition="left"
-                icon="edit"
-                primary
-                onClick={async () => {
-                    const response = await fetch(this.state.url, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ body: commentBody })
-                    });
-                }}
-            />
-        </Form>
-    );
-};
+        return (
+            <Form reply>
+                <Form.TextArea
+                    disabled={!loggedIn}
+                    value={commentBody}
+                    onChange={e => {
+                        this.setState({ commentBody: e.currentTarget.value });
+                    }}
+                />
+                <Button
+                    disabled={!loggedIn}
+                    content="Post Comment"
+                    labelPosition="left"
+                    icon="edit"
+                    primary
+                    onClick={async () => {
+                        console.log(commentBody);
+                        const r = await fetch(url, {
+                            method: "POST",
+                            headers: {
+                                Authorization:
+                                    "Bearer " +
+                                    localStorage.getItem("jwtToken"),
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ body: commentBody })
+                        });
+                        if (r.ok) {
+                            parent.setState({
+                                comments: parent.state.comments.concat(
+                                    r.comment
+                                )
+                            });
+                            postRef.setState(prevState => ({
+                                post: {
+                                    ...prevState.post,
+                                    comment_count:
+                                        postRef.state.post.comment_count
+                                }
+                            }));
+                        } else {
+                            console.log(r);
+                        }
+                    }}
+                />
+            </Form>
+        );
+    }
+}
 
 export default class CommentList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            commentBody: "",
             post_id: props.post_id,
+            postRef: props.parent,
+            commentBody: "",
             comments: [],
-            url:
-                "http://api.catpic.margiris.site:5000/post/" +
-                props.post_id +
-                "/comment"
+            url: "http://localhost:5000/post/" + props.post_id + "/comment"
         };
     }
 
@@ -55,7 +95,7 @@ export default class CommentList extends React.Component {
     }
 
     render() {
-        const { comments, commentBody } = this.state;
+        const { comments } = this.state;
 
         return (
             <Comment.Group>
@@ -81,7 +121,11 @@ export default class CommentList extends React.Component {
                         </Comment>
                     );
                 })}
-                <CommentForm />
+                <CommentForm
+                    parent={this}
+                    postRef={this.state.postRef}
+                    url={this.state.url}
+                />
             </Comment.Group>
         );
     }
