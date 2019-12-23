@@ -92,6 +92,32 @@ import LoginModal from "./LoginModal";
 //     );
 // };
 
+const VerticalSidebar = ({ animation, direction, visible }) => (
+    <Sidebar
+        as={Menu}
+        animation="overlay"
+        direction="left"
+        icon="labeled"
+        inverted
+        vertical
+        visible={visible}
+        width="thin"
+    >
+        <Menu.Item as="a">
+            <Icon name="home" />
+            Home
+        </Menu.Item>
+        <Menu.Item as="a">
+            <Icon name="gamepad" />
+            Games
+        </Menu.Item>
+        <Menu.Item as="a">
+            <Icon name="camera" />
+            Channels
+        </Menu.Item>
+    </Sidebar>
+);
+
 export default class TopMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -218,11 +244,7 @@ export default class TopMenu extends React.Component {
                             </Button>
                         </Input>
                     </Menu.Item>
-                    <Menu.Menu position="right">
-                        <Menu.Item header>
-                            <LoginModal />
-                        </Menu.Item>
-                    </Menu.Menu>
+                    <LoginModal />
                 </Container>
             </Menu>
         );

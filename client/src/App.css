@@ -60,6 +60,14 @@
     color: #1e70bf;
 }
 
+.label {
+    padding: 0.7em !important;
+}
+
+.header.item {
+    padding: 0 0.5em 0.1em !important;
+}
+
 .main-container {
     margin-top: 5em;
     margin-bottom: 1em;
@@ -91,12 +99,13 @@ svg {
     color: red !important;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 991px) {
     .ui.inverted.menu .item:not(.header) {
         display: none;
     }
 
     .bars {
+        padding-left: 0.5em;
         padding-right: 2em;
     }
 }
