@@ -137,6 +137,8 @@ export default class TopMenu extends React.Component {
                         CatPic
                     </Menu.Item>
                     <Menu.Item
+                        as="a"
+                        href="/"
                         name="home"
                         active={activeItem === "home"}
                         onClick={this.handleItemClick}

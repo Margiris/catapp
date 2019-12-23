@@ -8,12 +8,17 @@ class Post extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            parent: props.parent,
             post: props.post
         };
     }
 
     render() {
-        const { post } = this.state;
+        const { post, parent } = this.state;
+        var comment_count =
+            parent === undefined
+                ? post.comment_count
+                : parent.state.post.comment_count;
         // var datetime_difference = Date.now() - new Date(post.posted_on);
 
         return (
@@ -46,13 +51,14 @@ class Post extends React.Component {
                         <Card.Content extra>
                             <NavLink to="#">
                                 <Icon name="comments" />
-                                {post.comment_count} comments
+                                {comment_count} comment
+                                {comment_count === 1 ? "" : "s"}
                             </NavLink>
                         </Card.Content>
                     }
                 >
                     <Modal.Content>
-                        <Post post={post} />
+                        <Post parent={this} post={post} />
                         <CommentList parent={this} post_id={post.id} />
                     </Modal.Content>
                 </Modal>
