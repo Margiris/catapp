@@ -117,6 +117,7 @@ export default class CommentList extends React.Component {
                                 </Comment.Metadata>
                                 <Comment.Text>{comment.body}</Comment.Text>
                             </Comment.Content>
+                            <Button icon="close" className="del" />
                         </Comment>
                     );
                 })}

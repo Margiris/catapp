@@ -40,7 +40,7 @@ export default class TopMenu extends React.Component {
         const { sidebar_visible } = this.state;
 
         document.getElementById("mySidenav").style.left = sidebar_visible
-            ? 0 - document.getElementById("mySidenav").offsetWidth + "px"
+            ? "-60vw"
             : "0";
         this.setState({ sidebar_visible: !sidebar_visible });
     };
