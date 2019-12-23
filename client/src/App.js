@@ -16,6 +16,19 @@ function App() {
                 <Route path="/post/:post_id" component={PostWithComments} />
                 <Route path="/user/:name" component={UserList} />
             </BrowserRouter>
+            <div>
+                Icons made by{" "}
+                <a
+                    href="https://www.flaticon.com/authors/freepik"
+                    title="Freepik"
+                >
+                    Freepik
+                </a>{" "}
+                from{" "}
+                <a href="https://www.flaticon.com/" title="Flaticon">
+                    www.flaticon.com
+                </a>
+            </div>
         </div>
     );
 }
