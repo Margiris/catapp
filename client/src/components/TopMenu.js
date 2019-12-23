@@ -1,98 +1,15 @@
 import React from "react";
-import { Icon, Menu, Container, Input, Label, Button } from "semantic-ui-react";
+import {
+    Icon,
+    Menu,
+    Container,
+    Input,
+    Button,
+    Sidebar
+} from "semantic-ui-react";
 import LoginModal from "./LoginModal";
 
-//     <Menu icon="labeled" pointing secondary>
-//         <Menu.Item header>
-//             <span style={{ display: "flex" }}>
-//                 <Image
-//                     src="cat.svg"
-//                     height="15px"
-//                     style={{ padding: "0px 4px 0 0" }}
-//                 />
-//                 CatPic
-//             </span>
-//         </Menu.Item>
-//         <Menu.Item
-//             name="home"
-//             active={activeItem === "home"}
-//             onClick={handleItemClick}
-//         >
-//             <span>
-//                 <Icon name="home" />
-//                 Home
-//             </span>
-//         </Menu.Item>
-//         <Menu.Item
-//             name="user"
-//             active={activeItem === "user"}
-//             onClick={handleItemClick}
-//         >
-//             <span>
-//                 <Icon name="user" />
-//                 My Profile
-//             </span>
-//         </Menu.Item>
-//         {/* <Menu.Menu position="right">
-//     <Menu.Item
-//         name="logout"
-//         active={activeItem === "logout"}
-//         onClick={handleItemClick}
-//     />
-// </Menu.Menu> */}
-//     </Menu>
-// );
-
-// const SidebarMenu = ({ activeItem, handleItemClick }) => {
-//     return (
-//         <Sidebar.Pushable>
-//             <Sidebar
-//                 as={Menu}
-//                 icon="labeled"
-//                 pointing
-//                 secondary
-//                 animation="overlay"
-//                 onHide={() => setVisible(false)}
-//                 visible={visible}
-//                 width="thin"
-//             >
-//                 <Menu.Item header>
-//                     <span style={{ display: "flex" }}>
-//                         <Image
-//                             src="cat.svg"
-//                             height="15px"
-//                             style={{ padding: "0px 4px 0 0" }}
-//                         />
-//                         CatPic
-//                     </span>
-//                 </Menu.Item>
-//                 <Menu.Item
-//                     name="home"
-//                     active={activeItem === "home"}
-//                     onClick={handleItemClick}
-//                 >
-//                     <span>
-//                         <Icon name="home" />
-//                         Home
-//                     </span>
-//                 </Menu.Item>
-//                 <Menu.Item
-//                     name="user"
-//                     active={activeItem === "user"}
-//                     onClick={handleItemClick}
-//                 >
-//                     <span>
-//                         <Icon name="user" />
-//                         My Profile
-//                     </span>
-//                 </Menu.Item>
-//             </Sidebar>
-//             <Sidebar.Pusher></Sidebar.Pusher>
-//         </Sidebar.Pushable>
-//     );
-// };
-
-const VerticalSidebar = ({ animation, direction, visible }) => (
+const VerticalSidebar = ({ visible }) => (
     <Sidebar
         as={Menu}
         animation="overlay"
@@ -123,24 +40,46 @@ export default class TopMenu extends React.Component {
         super(props);
 
         this.state = {
+            sidebar_visible: true,
             activeItem: "",
             visible: false,
             post_id: ""
         };
-        this.reflectNavigation(this.props.location);
+        this.handleNavigation(this.props.location);
     }
 
     componentDidMount() {
         this.unlisten = this.props.history.listen((location, _) => {
-            this.reflectNavigation(location);
+            this.handleNavigation(location);
         });
+        document.getElementById("mySidenav").style.top =
+            document.getElementById("topBar").offsetHeight + "px";
+
+        this.toggleSidenav();
     }
 
     componentWillUnmount() {
         this.unlisten();
     }
 
-    reflectNavigation = location => {
+    toggleSidenav = () => {
+        const { sidebar_visible } = this.state;
+
+        document.getElementById("mySidenav").style.width = sidebar_visible
+            ? "0"
+            : "60%";
+        this.setState({ sidebar_visible: !sidebar_visible });
+    };
+
+    openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+
+    handleNavigation = location => {
         this.state.activeItem = location.pathname.includes("post")
             ? "post"
             : "home";
@@ -160,7 +99,7 @@ export default class TopMenu extends React.Component {
     setVisible = v => this.setState({ visible: v });
 
     render() {
-        const { activeItem, post_id } = this.state;
+        const { activeItem, post_id, sidebar_visible } = this.state;
 
         return (
             <Menu
@@ -170,12 +109,45 @@ export default class TopMenu extends React.Component {
                 inverted
                 style={{ backgroundColor: "#1b1c1d" }}
             >
-                <Container>
+                <Container id="topBar">
                     <Menu.Item
                         header
                         style={{ paddingTop: "2px", paddingBottom: "2px" }}
                     >
-                        <Icon name="bars" className="bars" />
+                        <Icon
+                            name={sidebar_visible ? "close" : "bars"}
+                            className="bars"
+                            onClick={this.toggleSidenav}
+                        />
+                        <Menu.Menu id="mySidenav" className="sidenav">
+                            <Menu.Item
+                                header
+                                name="home"
+                                active={activeItem === "home"}
+                                onClick={this.handleItemClick}
+                            >
+                                <Icon name="home" />
+                                Home
+                            </Menu.Item>
+                            <Menu.Item
+                                header
+                                name="user"
+                                active={activeItem === "user"}
+                                onClick={this.handleItemClick}
+                            >
+                                <Icon name="user" />
+                                My Profile
+                            </Menu.Item>
+                            <Menu.Item
+                                header
+                                name="post"
+                                active={activeItem === "post"}
+                                onClick={this.handleItemClick}
+                            >
+                                <Icon name="list" />
+                                Post
+                            </Menu.Item>
+                        </Menu.Menu>
                         <svg
                             width="29"
                             height="29"

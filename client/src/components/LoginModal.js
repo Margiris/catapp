@@ -277,8 +277,6 @@ export default class LoginModal extends React.Component {
                                                     password,
                                                     email
                                                 } = this.state;
-                                                const an_email = this.state
-                                                    .email;
 
                                                 fetch(
                                                     "http://api.catpic.margiris.site:5000/user",
