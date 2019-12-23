@@ -1,12 +1,5 @@
 import React from "react";
-import {
-    Comment,
-    Header,
-    Form,
-    Button,
-    Icon,
-    Container
-} from "semantic-ui-react";
+import { Comment, Header, Form, Button, Icon } from "semantic-ui-react";
 
 class CommentForm extends React.Component {
     constructor(props) {
@@ -40,7 +33,6 @@ class CommentForm extends React.Component {
                     icon="edit"
                     primary
                     onClick={async () => {
-                        console.log(commentBody);
                         const r = await fetch(url, {
                             method: "POST",
                             headers: {
@@ -52,16 +44,20 @@ class CommentForm extends React.Component {
                             body: JSON.stringify({ body: commentBody })
                         });
                         if (r.ok) {
+                            this.setState({ commentBody: "" });
+
+                            const resp = await r.json();
                             parent.setState({
                                 comments: parent.state.comments.concat(
-                                    r.comment
+                                    resp.comment
                                 )
                             });
+
                             postRef.setState(prevState => ({
                                 post: {
                                     ...prevState.post,
                                     comment_count:
-                                        postRef.state.post.comment_count
+                                        postRef.state.post.comment_count + 1
                                 }
                             }));
                         } else {
@@ -82,7 +78,10 @@ export default class CommentList extends React.Component {
             postRef: props.parent,
             commentBody: "",
             comments: [],
-            url: "http://localhost:5000/post/" + props.post_id + "/comment"
+            url:
+                "http://api.catpic.margiris.site:5000/post/" +
+                props.post_id +
+                "/comment"
         };
     }
 
