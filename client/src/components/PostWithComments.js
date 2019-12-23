@@ -14,6 +14,15 @@ class PostWithComments extends React.Component {
     }
 
     componentDidMount() {
+        this.unlisten = this.props.history.listen((location, _) => {
+            this.setState({ post_id: location.pathname.slice(6) });
+            this.fetch();
+        });
+
+        this.fetch();
+    }
+
+    fetch() {
         const url =
             "http://api.catpic.margiris.site:5000/post/" + this.state.post_id;
 
@@ -22,6 +31,10 @@ class PostWithComments extends React.Component {
                 this.setState({ post: data.post });
             })
         );
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
     }
 
     render() {

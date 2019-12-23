@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Menu, Container } from "semantic-ui-react";
+import { Icon, Menu, Container, Input, Label, Button } from "semantic-ui-react";
 import LoginModal from "./LoginModal";
 
 //     <Menu icon="labeled" pointing secondary>
@@ -95,14 +95,46 @@ import LoginModal from "./LoginModal";
 export default class TopMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { activeItem: "home", visible: false };
+
+        this.state = {
+            activeItem: "",
+            visible: false,
+            post_id: ""
+        };
+        this.reflectNavigation(this.props.location);
     }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    componentDidMount() {
+        this.unlisten = this.props.history.listen((location, _) => {
+            this.reflectNavigation(location);
+        });
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
+    }
+
+    reflectNavigation = location => {
+        this.state.activeItem = location.pathname.includes("post")
+            ? "post"
+            : "home";
+        this.state.post_id = location.pathname.slice(6);
+    };
+
+    handleItemClick = (e, { name }) => {
+        this.setState({ activeItem: name });
+
+        if (name === "post" && this.state.post_id.length === 24) {
+            this.props.history.push("/post/" + this.state.post_id);
+        } else if (name === "home") {
+            this.props.history.push("/");
+        }
+    };
+
     setVisible = v => this.setState({ visible: v });
 
     render() {
-        const { activeItem } = this.state;
+        const { activeItem, post_id } = this.state;
 
         return (
             <Menu
@@ -137,8 +169,6 @@ export default class TopMenu extends React.Component {
                         CatPic
                     </Menu.Item>
                     <Menu.Item
-                        as="a"
-                        href="/"
                         name="home"
                         active={activeItem === "home"}
                         onClick={this.handleItemClick}
@@ -153,6 +183,40 @@ export default class TopMenu extends React.Component {
                     >
                         <Icon name="user" />
                         My Profile
+                    </Menu.Item>
+                    <Menu.Item
+                        name="post"
+                        active={activeItem === "post"}
+                        onClick={this.handleItemClick}
+                    >
+                        <Icon name="list" />
+                        Post
+                    </Menu.Item>
+                    <Menu.Item style={{ minWidth: "20.5em" }}>
+                        <Input
+                            fluid
+                            action
+                            size="mini"
+                            inverted
+                            value={post_id}
+                            placeholder="<post_id>"
+                            style={{ marginLeft: "1.5em" }}
+                            onChange={e => {
+                                this.setState({ post_id: e.target.value });
+                            }}
+                        >
+                            <input />
+                            <Button
+                                as="a"
+                                href={"/post/" + this.state.post_id}
+                                name="post"
+                                size="mini"
+                                type="submit"
+                                onClick={this.handleItemClick}
+                            >
+                                <Icon name="chevron circle right" />
+                            </Button>
+                        </Input>
                     </Menu.Item>
                     <Menu.Menu position="right">
                         <Menu.Item header>

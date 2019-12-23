@@ -12,6 +12,10 @@ class PostList extends React.Component {
     }
 
     componentDidMount() {
+        this.unlisten = this.props.history.listen((location, _) => {
+            this.setState({ state: this.state });
+        });
+
         const url = "http://api.catpic.margiris.site:5000/post";
 
         fetch(url).then(response =>
@@ -19,6 +23,10 @@ class PostList extends React.Component {
                 this.setState({ posts: data.posts });
             })
         );
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
     }
 
     render() {

@@ -17,6 +17,9 @@ export default class LoginModal extends React.Component {
     open = () => this.setState({ open: true });
 
     render() {
+        if (localStorage.getItem("jwtToken").length === 172) {
+        }
+
         const { open } = this.state;
 
         if (
@@ -30,6 +33,8 @@ export default class LoginModal extends React.Component {
                     onClose={this.close}
                     trigger={
                         <Button
+                            style={{ padding: "7px 8px" }}
+                            size="mini"
                             content="Login"
                             labelPosition="left"
                             icon="sign-in"

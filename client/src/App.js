@@ -11,8 +11,8 @@ import { Footer } from "./components/Footer";
 function App() {
     return (
         <div>
-            <TopMenu />
             <BrowserRouter>
+                <Route path="/" component={TopMenu} />
                 <Route exact path="/" component={PostList} />
                 <Route path="/post/:post_id" component={PostWithComments} />
                 <Route path="/user/:name" component={UserList} />

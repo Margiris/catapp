@@ -5,7 +5,7 @@ export const Footer = () => (
     <Segment
         inverted
         vertical
-        style={{ margin: "1em 0em 0em", padding: "1.5em 0em" }}
+        style={{ margin: "3.5em 0em 0em", padding: "1.5em 0em" }}
     >
         <Container textAlign="center">
             <Container>
