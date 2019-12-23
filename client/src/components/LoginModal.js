@@ -17,9 +17,6 @@ export default class LoginModal extends React.Component {
     open = () => this.setState({ open: true });
 
     render() {
-        if (localStorage.getItem("jwtToken").length === 172) {
-        }
-
         const { open } = this.state;
 
         if (
