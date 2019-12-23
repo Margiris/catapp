@@ -95,7 +95,17 @@ svg {
     }
 }
 
-@media only screen and (min-width: 768px) {
+.del {
+    display: none;
+    top: 0;
+    right: 0;
+}
+
+.comment:hover .del {
+    display: relative;
+}
+
+@media only screen and (min-width: 991px) {
     .bars {
         display: none !important;
     }
