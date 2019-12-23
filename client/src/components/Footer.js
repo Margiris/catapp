@@ -26,7 +26,14 @@ export const Footer = () => (
                     />
                 </svg>
             </Container>
-            <List relaxed inverted divided link size="small">
+            <List
+                relaxed
+                inverted
+                divided
+                link
+                size="small"
+                className="different-font"
+            >
                 <List.Item>
                     Icon made by{" "}
                     <a
