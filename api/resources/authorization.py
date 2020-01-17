@@ -54,9 +54,8 @@ def token_required(f):
     def decorated(*args, **kwargs):
         try:
             token = request.headers['authorization'][7:]
-            assert ExpiredTokens.objects(token=token).first() is None
-
             payload = decode(token, app_secret_key)
+
             assert payload['exp'] > timegm(datetime.utcnow().utctimetuple())
             assert payload['iat'] > timegm(
                 (datetime.utcnow() - token_expiration_time).utctimetuple())
@@ -65,6 +64,8 @@ def token_required(f):
 
             assert current_user is not None
             assert current_user.active is True
+
+            assert payload['iat'] >= current_user.last_logout_time
         except Exception as e:
             abort(401, message='Token is missing, invalid or expired')
 
@@ -106,16 +107,13 @@ def validate_values_in_dictionary(dictionary, module_class, required_keys={}, se
     return errors
 
 
-def logout(token):
-    ExpiredTokens(
-        token=token
-    ).save()
+def logout(current_user):
+    current_user.last_logout_time = datetime.utcnow()
+    current_user.save()
 
 
 class Logout(Resource):
     @token_required
     def get(current_user, self):
-        token = request.headers['authorization'][7:]
-        logout(token)
-
+        logout(current_user)
         return {}, 204
