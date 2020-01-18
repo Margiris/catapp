@@ -29,16 +29,12 @@ app.session_interface = MongoEngineSessionInterface(db)
 
 api.add_resource(Login,             '/login', endpoint='login')
 api.add_resource(Logout,            '/logout', endpoint='logout')
-
 api.add_resource(User,              '/user',
                                     '/user/<string:name>', endpoint='user')
-
 api.add_resource(Post,              '/post',
                                     '/post/<string:post_id>', endpoint='post')
-
 api.add_resource(Comment,           '/post/<string:post_id>/comment',
                                     '/post/<string:post_id>/comment/<string:comment_id>', endpoint='comment')
-
 api.add_resource(UserPost,          '/user/<string:name>/post',
                                     '/user/<string:name>/post/<string:post_id>', endpoint='user_post')
 

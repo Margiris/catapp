@@ -30,6 +30,6 @@ class Users(Document):
     meta = {
         'db_alias': 'core',
         'collection': 'users',
-        'indexes': ['name', 'email'],
+        'indexes': ['name'],
         'ordering': ['-registered_datetime']
     }
