@@ -79,7 +79,7 @@ export default class CommentList extends React.Component {
             commentBody: "",
             comments: [],
             url:
-                "http://api.catpic.margiris.site:5000/post/" +
+                "http://172.17.0.2:5000/post/" +
                 props.post_id +
                 "/comment"
         };

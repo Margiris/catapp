@@ -24,7 +24,7 @@ class PostWithComments extends React.Component {
 
     fetch() {
         const url =
-            "http://api.catpic.margiris.site:5000/post/" + this.state.post_id;
+            "http://172.17.0.2:5000/post/" + this.state.post_id;
 
         fetch(url).then(response =>
             response.json().then(data => {

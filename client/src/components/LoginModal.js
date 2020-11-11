@@ -131,7 +131,7 @@ export default class LoginModal extends React.Component {
                                                 } = this.state;
 
                                                 fetch(
-                                                    "http://api.catpic.margiris.site:5000/login",
+                                                    "http://172.17.0.2:5000/login",
                                                     {
                                                         method: "GET",
                                                         headers: {
@@ -279,7 +279,7 @@ export default class LoginModal extends React.Component {
                                                 } = this.state;
 
                                                 fetch(
-                                                    "http://api.catpic.margiris.site:5000/user",
+                                                    "http://172.17.0.2:5000/user",
                                                     {
                                                         method: "POST",
                                                         headers: {
@@ -295,7 +295,7 @@ export default class LoginModal extends React.Component {
                                                 ).then(r => {
                                                     if (r.ok) {
                                                         fetch(
-                                                            "http://api.catpic.margiris.site:5000/login",
+                                                            "http://172.17.0.2:5000/login",
                                                             {
                                                                 method: "GET",
                                                                 headers: {
@@ -356,7 +356,7 @@ export default class LoginModal extends React.Component {
                             color="red"
                             onClick={async () => {
                                 await fetch(
-                                    "http://api.catpic.margiris.site:5000/logout",
+                                    "http://172.17.0.2:5000/logout",
                                     {
                                         method: "GET",
                                         headers: {
