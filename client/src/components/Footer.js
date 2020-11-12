@@ -49,9 +49,9 @@ export const Footer = () => (
                 </List.Item>
                 <List.Item>
                     <List.Header style={{ padding: "1em 0" }}>
-                        <Icon name="copyright" /> Margiris Burakauskas, IFF-6/10
+                        <Icon name="copyright" /> Margiris Burakauskas, IFM-0/1
                     </List.Header>
-                    <List.Content>2019</List.Content>
+                    <List.Content>2020</List.Content>
                 </List.Item>
             </List>
         </Container>
