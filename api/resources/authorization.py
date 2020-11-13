@@ -64,8 +64,8 @@ def token_required(f):
 
             assert current_user is not None
             assert current_user.active is True
-
-            assert payload['iat'] >= current_user.last_logout_time
+            if current_user.last_logout_time is not None:
+                assert datetime.utcfromtimestamp(payload['iat']) >= current_user.last_logout_time
         except Exception as e:
             abort(401, message='Token is missing, invalid or expired')
 
