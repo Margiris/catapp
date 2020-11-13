@@ -60,7 +60,7 @@ class UserPost(Resource):
                 f.write(bytes_image)
                 f.flush()
                 f.seek(0)
-                new_post.image.put(f)
+                # new_post.image.put(f)
             new_post.save()
 
             current_user.posts.append(new_post)
@@ -101,7 +101,7 @@ class UserPost(Resource):
                 f.write(bytes_image)
                 f.flush()
                 f.seek(0)
-                existing_post.image.replace(f)
+                # existing_post.image.replace(f)
 
         existing_post.save()
 
