@@ -7,7 +7,7 @@ class PostList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts: []
+            posts: [],
         };
     }
 
@@ -16,10 +16,10 @@ class PostList extends React.Component {
             this.setState({ state: this.state });
         });
 
-        const url = "http://172.17.0.2:5000/post";
+        const url = process.env.REACT_APP_API_URL + "/post";
 
-        fetch(url).then(response =>
-            response.json().then(data => {
+        fetch(url).then((response) =>
+            response.json().then((data) => {
                 this.setState({ posts: data.posts });
             })
         );
@@ -35,7 +35,7 @@ class PostList extends React.Component {
         return (
             <Container className="main-container">
                 <Loader inline="centered" active={posts === []} />
-                {posts.map(post => {
+                {posts.map((post) => {
                     return <Post key={post.id} post={post} />;
                 })}
             </Container>

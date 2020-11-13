@@ -9,7 +9,7 @@ class PostWithComments extends React.Component {
         super(props);
         this.state = {
             post_id: this.props.match.params.post_id,
-            post: Object()
+            post: Object(),
         };
     }
 
@@ -24,10 +24,10 @@ class PostWithComments extends React.Component {
 
     fetch() {
         const url =
-            "http://172.17.0.2:5000/post/" + this.state.post_id;
+            process.env.REACT_APP_API_URL + "/post/" + this.state.post_id;
 
-        fetch(url).then(response =>
-            response.json().then(data => {
+        fetch(url).then((response) =>
+            response.json().then((data) => {
                 this.setState({ post: data.post });
             })
         );

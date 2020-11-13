@@ -11,7 +11,7 @@ class CommentForm extends React.Component {
             loggedIn:
                 localStorage.getItem("jwtToken") !== null &&
                 localStorage.getItem("jwtToken").length === 172,
-            url: props.url
+            url: props.url,
         };
     }
     render() {
@@ -22,7 +22,7 @@ class CommentForm extends React.Component {
                 <Form.TextArea
                     disabled={!loggedIn}
                     value={commentBody}
-                    onChange={e => {
+                    onChange={(e) => {
                         this.setState({ commentBody: e.currentTarget.value });
                     }}
                 />
@@ -39,9 +39,9 @@ class CommentForm extends React.Component {
                                 Authorization:
                                     "Bearer " +
                                     localStorage.getItem("jwtToken"),
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
                             },
-                            body: JSON.stringify({ body: commentBody })
+                            body: JSON.stringify({ body: commentBody }),
                         });
                         if (r.ok) {
                             this.setState({ commentBody: "" });
@@ -50,15 +50,15 @@ class CommentForm extends React.Component {
                             parent.setState({
                                 comments: parent.state.comments.concat(
                                     resp.comment
-                                )
+                                ),
                             });
 
-                            postRef.setState(prevState => ({
+                            postRef.setState((prevState) => ({
                                 post: {
                                     ...prevState.post,
                                     comment_count:
-                                        postRef.state.post.comment_count + 1
-                                }
+                                        postRef.state.post.comment_count + 1,
+                                },
                             }));
                         } else {
                             console.log(r);
@@ -79,15 +79,16 @@ export default class CommentList extends React.Component {
             commentBody: "",
             comments: [],
             url:
-                "http://172.17.0.2:5000/post/" +
+                process.env.REACT_APP_API_URL +
+                "/post/" +
                 props.post_id +
-                "/comment"
+                "/comment",
         };
     }
 
     componentDidMount() {
-        fetch(this.state.url).then(response =>
-            response.json().then(data => {
+        fetch(this.state.url).then((response) =>
+            response.json().then((data) => {
                 this.setState({ comments: data.comments });
             })
         );
@@ -101,7 +102,7 @@ export default class CommentList extends React.Component {
                 <Header as="h3" dividing>
                     Comments
                 </Header>
-                {comments.map(comment => {
+                {comments.map((comment) => {
                     return (
                         <Comment key={comment.id}>
                             <Comment.Content>

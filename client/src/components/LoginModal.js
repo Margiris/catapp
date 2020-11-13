@@ -6,7 +6,7 @@ import {
     Segment,
     Message,
     Label,
-    Menu
+    Menu,
 } from "semantic-ui-react";
 
 export default class LoginModal extends React.Component {
@@ -19,7 +19,7 @@ export default class LoginModal extends React.Component {
             open_login: false,
             open_signup: false,
             loggedIn: false,
-            badCredentials: false
+            badCredentials: false,
         };
     }
 
@@ -67,7 +67,7 @@ export default class LoginModal extends React.Component {
                                         // paddingBottom: "2px",
                                         marginRight: "0.5em",
                                         // marginTop: "0",
-                                        fill: "black"
+                                        fill: "black",
                                     }}
                                 >
                                     <path
@@ -97,9 +97,9 @@ export default class LoginModal extends React.Component {
                                             iconPosition="left"
                                             placeholder="Username"
                                             value={this.state.username}
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 this.setState({
-                                                    username: e.target.value
+                                                    username: e.target.value,
                                                 });
                                             }}
                                         />
@@ -110,9 +110,9 @@ export default class LoginModal extends React.Component {
                                             placeholder="Password"
                                             type="password"
                                             value={this.state.password}
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 this.setState({
-                                                    password: e.target.value
+                                                    password: e.target.value,
                                                 });
                                             }}
                                         />
@@ -127,11 +127,13 @@ export default class LoginModal extends React.Component {
                                             onClick={() => {
                                                 const {
                                                     username,
-                                                    password
+                                                    password,
                                                 } = this.state;
 
                                                 fetch(
-                                                    "http://172.17.0.2:5000/login",
+                                                    process.env
+                                                        .REACT_APP_API_URL +
+                                                        "/login",
                                                     {
                                                         method: "GET",
                                                         headers: {
@@ -141,12 +143,12 @@ export default class LoginModal extends React.Component {
                                                                     username +
                                                                         ":" +
                                                                         password
-                                                                )
-                                                        }
+                                                                ),
+                                                        },
                                                     }
-                                                ).then(r => {
+                                                ).then((r) => {
                                                     if (r.ok) {
-                                                        r.json().then(d => {
+                                                        r.json().then((d) => {
                                                             console.log(d);
                                                             localStorage.setItem(
                                                                 "jwtToken",
@@ -154,13 +156,13 @@ export default class LoginModal extends React.Component {
                                                             );
                                                             this.setState({
                                                                 loggedIn: true,
-                                                                badCredentials: false
+                                                                badCredentials: false,
                                                             });
                                                             this.close_login();
                                                         });
                                                     } else {
                                                         this.setState({
-                                                            badCredentials: true
+                                                            badCredentials: true,
                                                         });
                                                     }
                                                 });
@@ -201,7 +203,7 @@ export default class LoginModal extends React.Component {
                                         // paddingBottom: "2px",
                                         marginRight: "0.5em",
                                         // marginTop: "0",
-                                        fill: "black"
+                                        fill: "black",
                                     }}
                                 >
                                     <path
@@ -231,9 +233,9 @@ export default class LoginModal extends React.Component {
                                             iconPosition="left"
                                             placeholder="Username"
                                             value={this.state.username}
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 this.setState({
-                                                    username: e.target.value
+                                                    username: e.target.value,
                                                 });
                                             }}
                                         />
@@ -244,9 +246,9 @@ export default class LoginModal extends React.Component {
                                             placeholder="someone@example.com"
                                             type="email"
                                             value={this.state.email}
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 this.setState({
-                                                    email: e.target.value
+                                                    email: e.target.value,
                                                 });
                                             }}
                                         />
@@ -257,9 +259,9 @@ export default class LoginModal extends React.Component {
                                             placeholder="Password"
                                             type="password"
                                             value={this.state.password}
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 this.setState({
-                                                    password: e.target.value
+                                                    password: e.target.value,
                                                 });
                                             }}
                                         />
@@ -275,27 +277,31 @@ export default class LoginModal extends React.Component {
                                                 const {
                                                     username,
                                                     password,
-                                                    email
+                                                    email,
                                                 } = this.state;
 
                                                 fetch(
-                                                    "http://172.17.0.2:5000/user",
+                                                    process.env
+                                                        .REACT_APP_API_URL +
+                                                        "/user",
                                                     {
                                                         method: "POST",
                                                         headers: {
                                                             "Content-Type":
-                                                                "application/json"
+                                                                "application/json",
                                                         },
                                                         body: JSON.stringify({
                                                             name: username,
                                                             email: email,
-                                                            password: password
-                                                        })
+                                                            password: password,
+                                                        }),
                                                     }
-                                                ).then(r => {
+                                                ).then((r) => {
                                                     if (r.ok) {
                                                         fetch(
-                                                            "http://172.17.0.2:5000/login",
+                                                            process.env
+                                                                .REACT_APP_API_URL +
+                                                                "/login",
                                                             {
                                                                 method: "GET",
                                                                 headers: {
@@ -305,13 +311,13 @@ export default class LoginModal extends React.Component {
                                                                             username +
                                                                                 ":" +
                                                                                 password
-                                                                        )
-                                                                }
+                                                                        ),
+                                                                },
                                                             }
-                                                        ).then(r => {
+                                                        ).then((r) => {
                                                             if (r.ok) {
                                                                 r.json().then(
-                                                                    d => {
+                                                                    (d) => {
                                                                         console.log(
                                                                             d
                                                                         );
@@ -322,7 +328,7 @@ export default class LoginModal extends React.Component {
                                                                         this.setState(
                                                                             {
                                                                                 loggedIn: true,
-                                                                                badCredentials: false
+                                                                                badCredentials: false,
                                                                             }
                                                                         );
                                                                         this.close_signup();
@@ -330,7 +336,7 @@ export default class LoginModal extends React.Component {
                                                                 );
                                                             } else {
                                                                 this.setState({
-                                                                    badCredentials: true
+                                                                    badCredentials: true,
                                                                 });
                                                             }
                                                         });
@@ -356,16 +362,18 @@ export default class LoginModal extends React.Component {
                             color="red"
                             onClick={async () => {
                                 await fetch(
-                                    "http://172.17.0.2:5000/logout",
+                                    process.env.REACT_APP_API_URL + "/logout",
                                     {
                                         method: "GET",
                                         headers: {
                                             Authorization:
                                                 "Bearer " +
-                                                localStorage.getItem("jwtToken")
-                                        }
+                                                localStorage.getItem(
+                                                    "jwtToken"
+                                                ),
+                                        },
                                     }
-                                ).then(_ => {
+                                ).then((_) => {
                                     localStorage.setItem("jwtToken", "");
                                 });
                                 this.setState({ loggedIn: false });
