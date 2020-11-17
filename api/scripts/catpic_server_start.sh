@@ -16,7 +16,7 @@ git stash save --keep-index
 git stash drop
 
 # update dev branch
-printf $green_text 'Updating dev branch...'
+printf $green_text 'Updating master branch...'
 git checkout master
 git pull
 

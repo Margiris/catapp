@@ -11,6 +11,7 @@ class Users(Document):
     email = EmailField(unique=True, required=True)
     password = StringField(required=True)
     registered_datetime = DateTimeField(default=datetime.utcnow)
+    last_logout_time = DateTimeField()
 
     posts = ListField(ReferenceField('Posts'))
     comments = ListField(ReferenceField('Comments'))
@@ -29,6 +30,6 @@ class Users(Document):
     meta = {
         'db_alias': 'core',
         'collection': 'users',
-        'indexes': ['name', 'email'],
+        'indexes': ['name'],
         'ordering': ['-registered_datetime']
     }
