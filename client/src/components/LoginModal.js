@@ -32,6 +32,8 @@ export default class LoginModal extends React.Component {
     render() {
         const { open_login, open_signup } = this.state;
 
+        console.log(process.env.REACT_APP_API_URL);
+
         if (
             localStorage.getItem("jwtToken") === null ||
             localStorage.getItem("jwtToken").length !== 172
@@ -131,7 +133,7 @@ export default class LoginModal extends React.Component {
                                                 } = this.state;
 
                                                 fetch(
-                                                    "http://api.catpic.margiris.site:5000/login",
+                                                    process.env.REACT_APP_API_URL + "/login",
                                                     {
                                                         method: "GET",
                                                         headers: {
@@ -279,7 +281,7 @@ export default class LoginModal extends React.Component {
                                                 } = this.state;
 
                                                 fetch(
-                                                    "http://api.catpic.margiris.site:5000/user",
+                                                    process.env.REACT_APP_API_URL + "/user",
                                                     {
                                                         method: "POST",
                                                         headers: {
@@ -295,7 +297,7 @@ export default class LoginModal extends React.Component {
                                                 ).then(r => {
                                                     if (r.ok) {
                                                         fetch(
-                                                            "http://api.catpic.margiris.site:5000/login",
+                                                            process.env.REACT_APP_API_URL + "/login",
                                                             {
                                                                 method: "GET",
                                                                 headers: {
@@ -356,7 +358,7 @@ export default class LoginModal extends React.Component {
                             color="red"
                             onClick={async () => {
                                 await fetch(
-                                    "http://api.catpic.margiris.site:5000/logout",
+                                    process.env.REACT_APP_API_URL + "/logout",
                                     {
                                         method: "GET",
                                         headers: {

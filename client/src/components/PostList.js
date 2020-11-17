@@ -16,7 +16,7 @@ class PostList extends React.Component {
             this.setState({ state: this.state });
         });
 
-        const url = "http://api.catpic.margiris.site:5000/post";
+        const url = process.env.REACT_APP_API_URL + "/post";
 
         fetch(url).then(response =>
             response.json().then(data => {
