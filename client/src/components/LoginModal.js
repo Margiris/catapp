@@ -32,6 +32,8 @@ export default class LoginModal extends React.Component {
     render() {
         const { open_login, open_signup } = this.state;
 
+        console.log(process.env.REACT_APP_API_URL);
+
         if (
             localStorage.getItem("jwtToken") === null ||
             localStorage.getItem("jwtToken").length !== 172
