@@ -2,13 +2,13 @@ version: "3"
 services:
     client:
         build: ./client
-        image: arclab2catpic.azurecr.io/catpic-client
+        image: catpic.azurecr.io/client
         ports:
             - "80:80"
         depends_on:
             - api
     api:
         build: ./api
-        image: arclab2catpic.azurecr.io/catpic-api
+        image: catpic.azurecr.io/api
         ports:
             - "5000:5000"
