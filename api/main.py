@@ -3,7 +3,7 @@ from flask_restful import Api
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 from flask_cors import CORS
 
-from secrets import app_secret_key, db_local_ip, db_debug_ip
+from secrets import app_secret_key, db_local_ip, db_debug_ip, db_remote_ip
 
 from resources.user import User
 from resources.post import Post
@@ -19,7 +19,7 @@ CORS(app)
 app.config['MONGODB_SETTINGS'] = {
     'alias': 'core',
     'db': 'catpic',
-    'host': db_debug_ip if __name__ == "__main__" else db_local_ip,
+    'host': db_debug_ip if __name__ == "__main__" else db_remote_ip,
     'port': 27017
 }
 
