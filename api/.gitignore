@@ -124,6 +124,3 @@ dmypy.json
 
 # VSCode stuff
 .vscode/
-
-# personal secrets ;)
-secrets.py

@@ -15,7 +15,6 @@ from resources.authorization import Login, Logout
 app = Flask(__name__)
 CORS(app)
 
-app.config['SECRET_KEY'] = app_secret_key
 app.config['MONGODB_SETTINGS'] = {
     'alias': 'core',
     'db': 'catpic',
