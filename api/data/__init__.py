@@ -1,6 +1,7 @@
 from mongoengine import register_connection
+from secrets import db_remote_ip
 
 register_connection(alias='core', name='catpic',
-                    host='192.168.0.102', port=27017)
+                    host=db_remote_ip, port=27017)
 register_connection(alias='default', name='catpic',
-                    host='192.168.0.102', port=27017)
+                    host=db_remote_ip, port=27017)

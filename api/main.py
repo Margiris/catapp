@@ -39,4 +39,4 @@ api.add_resource(UserPost,          '/user/<string:name>/post',
                                     '/user/<string:name>/post/<string:post_id>', endpoint='user_post')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=80)
